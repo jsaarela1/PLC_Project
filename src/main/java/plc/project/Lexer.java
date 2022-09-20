@@ -48,9 +48,9 @@ public final class Lexer {
         } else if (peek("[0]|[-]|[1-9]")) {
             return lexNumber(); // figure out how to differentiate integer vs a decimal
         } else if (peek("[']")) {
-            lexCharacter();
+            return lexCharacter();
         } else if (peek("\"")) {
-            lexString();
+            return lexString();
         } else if (peek("\\")) {
             lexEscape();
         } else if (peek(" [!=]|[=]|[&]|[|]")) {
@@ -79,6 +79,7 @@ public final class Lexer {
     public Token lexNumber() {
         int current = chars.index; // keep track of current index, in case of errors
         boolean makeDecimal = false; // if a '.' is found, set to true and return a decimal
+
         // if 0 is first digit
         if (match("[0]")) {
             current++;
@@ -89,9 +90,10 @@ public final class Lexer {
                    current++;
             }
             // cannot have a leading 0
-            else if (match("[0-9]"))
+            else if (match("[^.]"))
                 throw new ParseException("Invalid leading zero at index: ", current);
         }
+
         // if negative
         else if (match("[-]")) {
             current++;
@@ -106,6 +108,7 @@ public final class Lexer {
             } else
                 throw new ParseException("Invalid negative number at index: ", current);
         }
+
         // everything else
         else {
             while (peek("[0-9]|[.]")) {
@@ -126,20 +129,30 @@ public final class Lexer {
     }
 
     public Token lexCharacter() {
-        int start = chars.index;
-        int current = start;
+        int current = chars.index;
         match("[']");
         current++;
-        if (match("[\\]")) {
+
+        // check for the invalid characters
+        if (peek("[\\\\]")) {
+            match("[\\\\]");
             current++;
-            if (match("[']")) {
+            System.out.print("CHECK");
+            if (match("[^[n] | [r] | [\\\\]]"))
                 current++;
-            } else
-                throw new ParseException("Invalid character at index ", current);
-        } else
-            throw new ParseException("Invalid character at index ", current);
-        System.out.println("Character of length: " + (current-start));
-        throw new UnsupportedOperationException(); //TODO
+            else
+                throw new ParseException("Invalid character at index: ", current);
+        } else if (match("[^']"))
+            current++;
+        else
+            throw new ParseException("Invalid character at index: ", current);
+
+        // check for a closing '
+        if (match("[']"))
+            current++;
+        else
+            throw new ParseException("Character not enclosed in single quote at index: ", current);
+        return chars.emit(Token.Type.CHARACTER);
     }
 
     public Token lexString() {

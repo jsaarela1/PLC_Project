@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="PLC project lex">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="We got identifier, integers, and decimals running">
       <change afterPath="$PROJECT_DIR$/src/main/java/plc/examples/Account.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/plc/homework/Regex.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/test/java/plc/examples/AccountTests.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/test/java/plc/homework/RegexTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +96,7 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.LexerTests">
+  <component name="RunManager" selected="JUnit.LexerTests.testCharacter">
     <configuration name="LexerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -177,11 +178,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.LexerTests" />
+        <item itemvalue="JUnit.LexerTests.testCharacter" />
         <item itemvalue="JUnit.LexerTests.testDecimal" />
         <item itemvalue="JUnit.LexerTests.testInteger" />
+        <item itemvalue="JUnit.LexerTests" />
         <item itemvalue="JUnit.LexerTests.testIdentifier" />
-        <item itemvalue="JUnit.LexerTests.testCharacter" />
       </list>
     </recent_temporary>
   </component>
@@ -208,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663635794194</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="We got identifier, integers, and decimals running">
+      <created>1663640676632</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1663640676632</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -224,6 +232,18 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="PLC project lex" />
-    <option name="LAST_COMMIT_MESSAGE" value="PLC project lex" />
+    <MESSAGE value="We got identifier, integers, and decimals running" />
+    <option name="LAST_COMMIT_MESSAGE" value="We got identifier, integers, and decimals running" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Lexer.java</url>
+          <line>136</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
