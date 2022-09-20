@@ -29,7 +29,8 @@ public final class Lexer {
      */
     public List<Token> lex() {
         List list = new ArrayList<>();
-        list.add(lexToken());
+        if (peek("[^ ] && [^\b] && [^\n] && [^\r] && [^\t]"))
+            list.add(lexToken());
         return list;
         //throw new UnsupportedOperationException(); //TODO
     }
@@ -51,17 +52,9 @@ public final class Lexer {
             return lexCharacter();
         } else if (peek("\"")) {
             return lexString();
-        } else if (peek("\\")) {
-            lexEscape();
-        } else if (peek(" [!=]|[=]|[&]|[|]")) {
-            lexOperator();
-        } else if (peek(" [\b]|[\n]|[\r]|[\t]")) {
-            // whitespace, thus
-            chars.advance();
-        } else {
-            throw new UnsupportedOperationException(); //TODO
+        } else if (peek("[^ [\b]|[\n]|[\r]|[\t]]")) {
+            return lexOperator();
         }
-        // also need to check for whitespace
         throw new UnsupportedOperationException();
     }
 
@@ -187,8 +180,20 @@ public final class Lexer {
     }
 
     public Token lexOperator() {
-        System.out.println("operator");
-        throw new UnsupportedOperationException(); //TODO
+        int current = chars.index;
+        if (match("[!]")) {
+            current++;
+            match("[=]");
+        } else if (match("[&]")) {
+            current++;
+            match("[&]");
+        } else if (match("[|]")) {
+            current++;
+            match("[|]");
+        }
+        match("[^ ]");
+        return chars.emit(Token.Type.OPERATOR);
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
