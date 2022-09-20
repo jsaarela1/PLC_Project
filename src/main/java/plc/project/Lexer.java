@@ -156,8 +156,29 @@ public final class Lexer {
     }
 
     public Token lexString() {
-        System.out.println("string");
-        throw new UnsupportedOperationException(); //TODO
+        int current = chars.index;
+        match("\"");
+        current++;
+
+        // run until a double quote
+        while (peek("[^\"]")) {
+            if (peek("[\\\\]")) {
+                match("[\\\\]");
+                current++;
+                System.out.print("CHECK");
+                if (match("[^[n] | [r] | [\\\\]]"))
+                    current++;
+                else
+                    throw new ParseException("Invalid string at index: ", current);
+            } else if (match("[^\"]"))
+                current++;
+        }
+        // check for a closing '
+        if (match("\""))
+            current++;
+        else
+            throw new ParseException("Missing double quote at index: ", current);
+        return chars.emit(Token.Type.STRING);
     }
 
     public void lexEscape() {
