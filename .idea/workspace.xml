@@ -5,26 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="PLC project lex">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/plc/examples/Account.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/plc/examples/TestRE.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/plc/homework/Regex.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/plc/project/ParseException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/plc/project/Token.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/test/java/plc/examples/AccountTests.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/test/java/plc/homework/RegexTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +95,22 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.LexerTests.testIdentifier">
+  <component name="RunManager" selected="JUnit.LexerTests">
+    <configuration name="LexerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PLC_Project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.LexerTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="LexerTests.testCharacter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -158,7 +159,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LexerTests.testOperator" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="LexerTests.testInteger" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -168,23 +169,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.LexerTests" />
-      <option name="METHOD_NAME" value="testOperator(java.lang.String,java.lang.String,boolean)" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="LexerTests.testString" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PLC_Project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.LexerTests" />
-      <option name="METHOD_NAME" value="testString(java.lang.String,java.lang.String,boolean)" />
+      <option name="METHOD_NAME" value="testInteger(java.lang.String,java.lang.String,boolean)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -192,11 +177,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.LexerTests" />
+        <item itemvalue="JUnit.LexerTests.testDecimal" />
+        <item itemvalue="JUnit.LexerTests.testInteger" />
         <item itemvalue="JUnit.LexerTests.testIdentifier" />
         <item itemvalue="JUnit.LexerTests.testCharacter" />
-        <item itemvalue="JUnit.LexerTests.testOperator" />
-        <item itemvalue="JUnit.LexerTests.testString" />
-        <item itemvalue="JUnit.LexerTests.testDecimal" />
       </list>
     </recent_temporary>
   </component>
@@ -216,7 +201,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663635209700</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="PLC project lex">
+      <created>1663635794194</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1663635794194</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

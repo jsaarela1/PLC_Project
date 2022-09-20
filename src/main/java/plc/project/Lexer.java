@@ -1,5 +1,6 @@
 package plc.project;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,10 @@ public final class Lexer {
      * whitespace where appropriate.
      */
     public List<Token> lex() {
-        throw new UnsupportedOperationException(); //TODO
+        List list = new ArrayList<>();
+        list.add(lexToken());
+        return list;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -40,9 +44,9 @@ public final class Lexer {
      */
     public Token lexToken() {
         if (peek("[A-Za-z]|[@]")) {
-            lexIdentifier();
+            return lexIdentifier();
         } else if (peek("[0]|[-]|[1-9]")) {
-            lexNumber(); // figure out how to differentiate integer vs a decimal
+            return lexNumber(); // figure out how to differentiate integer vs a decimal
         } else if (peek("[']")) {
             lexCharacter();
         } else if (peek("\"")) {
@@ -69,14 +73,56 @@ public final class Lexer {
         while (match("[A-Za-z0-9_-]")) {
             current++;
         }
-        System.out.println("Identifier of length: " + (current-start));
-        // create token of length current - start!
-        throw new UnsupportedOperationException(); //TODO
+        return chars.emit(Token.Type.IDENTIFIER);
     }
 
     public Token lexNumber() {
-        System.out.println("number");
-        throw new UnsupportedOperationException(); //TODO
+        int current = chars.index; // keep track of current index, in case of errors
+        boolean makeDecimal = false; // if a '.' is found, set to true and return a decimal
+        // if 0 is first digit
+        if (match("[0]")) {
+            current++;
+            if (match("[.]")) {
+                makeDecimal = true;
+                current++;
+                while (match("[1-9]"))
+                   current++;
+            }
+            // cannot have a leading 0
+            else if (match("[0-9]"))
+                throw new ParseException("Invalid leading zero at index: ", current);
+        }
+        // if negative
+        else if (match("[-]")) {
+            current++;
+            if (match("[1-9]")) {
+                current++;
+                while (peek("[0-9]|[.]"))
+                    if (match("[.]"))
+                        makeDecimal = true;
+                    else
+                        match("[0-9]");
+                    current++;
+            } else
+                throw new ParseException("Invalid negative number at index: ", current);
+        }
+        // everything else
+        else {
+            while (peek("[0-9]|[.]")) {
+                if (match("[.]")) {
+                    makeDecimal = true;
+                    if (!peek("[0-9]"))
+                        throw new ParseException("No numbers after the decimal point at index: ", current);
+                }
+                else
+                    match("[0-9]");
+                current++;
+            }
+        }
+        if (makeDecimal)
+            return chars.emit(Token.Type.DECIMAL);
+        else
+            return chars.emit(Token.Type.INTEGER);
     }
 
     public Token lexCharacter() {
