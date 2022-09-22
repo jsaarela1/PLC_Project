@@ -38,8 +38,11 @@ public final class Lexer {
                     chars.advance();
                     chars.skip();
                 }
-            } else if (!peek("[ ]")) // check for a space
+            }
+            // check to make sure it is not a space
+            else if (!peek("[ ]"))
                 list.add(lexToken());
+            // if it is a space
             else {
                 chars.advance();
                 chars.skip();
@@ -89,8 +92,42 @@ public final class Lexer {
         int current = chars.index; // keep track of current index, in case of errors
         boolean makeDecimal = false; // if a '.' is found, set to true and return a decimal
 
-        // if 0 is first digit
+        boolean isNegative = false;
+        boolean leadingZero = false;
+
         if (match("[0]")) {
+            current++;
+            leadingZero = true;
+        }
+        if (match("[-]")) {
+            current++;
+            isNegative = true;
+            if (match("[0]"))
+                leadingZero = true;
+        }
+        while (peek("[0-9]|[.]|[-]")) {
+            if (isNegative && peek("[-]"))
+                throw new ParseException("Invalid negative number at index: ", current);
+            else if (makeDecimal && peek("[.]"))
+                throw new ParseException("Invalid decimal at index: ", current);
+            else if (leadingZero && (!peek("[.]")))
+                throw new ParseException("Invalid number because of leading zero: ", current);
+            else if (match("[-]")) {
+                current++;
+                isNegative = true;
+            } else if (match("[.]")) {
+                current++;
+                makeDecimal = true;
+                if (!peek("[0-9]"))
+                    throw new ParseException("No value after the decimal point at index: ", current);
+                // if it is a leading zero followed by a decimal, no error
+                if (leadingZero) leadingZero = false;
+            } else if (match("[0-9]")) {
+                current++;
+            }
+        }
+        // if 0 is first digit
+        /*if (match("[0]")) {
             current++;
             if (match("[.]")) {
                 makeDecimal = true;
@@ -131,6 +168,9 @@ public final class Lexer {
                 current++;
             }
         }
+         */
+        if (isNegative && !makeDecimal && leadingZero)
+            throw new ParseException("Cannot have a negative zero. Check index: ", current);
         if (makeDecimal)
             return chars.emit(Token.Type.DECIMAL);
         else

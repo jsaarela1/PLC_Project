@@ -66,7 +66,8 @@ public class LexerTests {
                 Arguments.of("No decimal point", "45", false),
                 Arguments.of("Trailing Decimal", "1.", false),
                 Arguments.of("Leading zero", "04.12", false),
-                Arguments.of("Leading Decimal", ".5", false)
+                Arguments.of("Leading Decimal", ".5", false),
+                Arguments.of("Multiple Decimal", "1.5.4", false)
         );
     }
 
