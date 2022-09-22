@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="got string up and running">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="everything except operator working">
       <change afterPath="$PROJECT_DIR$/src/main/java/plc/examples/Account.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/plc/homework/Regex.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/test/java/plc/examples/AccountTests.java" afterDir="false" />
@@ -179,8 +179,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.LexerTests" />
-        <item itemvalue="JUnit.LexerTests.testOperator" />
         <item itemvalue="JUnit.LexerTests.testExamples" />
+        <item itemvalue="JUnit.LexerTests.testOperator" />
         <item itemvalue="JUnit.LexerTests.testCharacter" />
         <item itemvalue="JUnit.LexerTests.testString" />
       </list>
@@ -230,7 +230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663704307477</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="everything except operator working">
+      <created>1663707157683</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1663707157683</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -249,17 +256,7 @@
     <MESSAGE value="We got identifier, integers, and decimals running" />
     <MESSAGE value="got character up and running" />
     <MESSAGE value="got string up and running" />
-    <option name="LAST_COMMIT_MESSAGE" value="got string up and running" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Lexer.java</url>
-          <line>30</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="everything except operator working" />
+    <option name="LAST_COMMIT_MESSAGE" value="everything except operator working" />
   </component>
 </project>

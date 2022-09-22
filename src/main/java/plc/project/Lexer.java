@@ -29,8 +29,23 @@ public final class Lexer {
      */
     public List<Token> lex() {
         List list = new ArrayList<>();
-        if (peek("[^ ] && [^\b] && [^\n] && [^\r] && [^\t]"))
-            list.add(lexToken());
+        while (chars.has(0)) {
+            // check for \b\n\r\t
+            if ((peek("[\\\\]")) && (chars.has(1))) {
+                // get the index of the next character and check for if it needs to be skipped over
+                char checkNext = chars.get(1);
+                if ((checkNext == 'b') || (checkNext == 'n') || (checkNext == 'r') || (checkNext == 't')) {
+                    chars.advance();
+                    chars.skip();
+                }
+            } else if (!peek("[ ]")) // check for a space
+                list.add(lexToken());
+            else {
+                chars.advance();
+                chars.skip();
+            }
+        }
+
         return list;
         //throw new UnsupportedOperationException(); //TODO
     }
@@ -52,10 +67,11 @@ public final class Lexer {
             return lexCharacter();
         } else if (peek("\"")) {
             return lexString();
-        } else if (peek("[^ [\b]|[\n]|[\r]|[\t]]")) {
-            return lexOperator();
-        }
-        throw new UnsupportedOperationException();
+        } //else if (peek("[^ [\b]|[\n]|[\r]|[\t]]")) {
+            //return lexOperator();
+       // }
+        //throw new UnsupportedOperationException();
+        return lexOperator();
     }
 
     public Token lexIdentifier() {
@@ -83,7 +99,7 @@ public final class Lexer {
                    current++;
             }
             // cannot have a leading 0
-            else if (match("[^.]"))
+            else if (peek("[0-9]"))
                 throw new ParseException("Invalid leading zero at index: ", current);
         }
 
@@ -184,16 +200,20 @@ public final class Lexer {
         if (match("[!]")) {
             current++;
             match("[=]");
+        } else if (match("[=]")) {
+            current++;
+            if (peek("[=]")) {
+                match("[=]");
+                current++;
+            }
         } else if (match("[&]")) {
             current++;
             match("[&]");
         } else if (match("[|]")) {
             current++;
             match("[|]");
-        }
-        match("[^ ]");
+        } else match("[^ ]");
         return chars.emit(Token.Type.OPERATOR);
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**

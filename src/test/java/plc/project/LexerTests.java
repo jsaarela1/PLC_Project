@@ -17,8 +17,7 @@ public class LexerTests {
     void testIdentifier(String test, String input, boolean success) {
         test(input, Token.Type.IDENTIFIER, success);
     }
-    // regex for testIdentifier
-    // ^([A-Za-z]|[@])([A-Za-z0-9_-])*$
+
     private static Stream<Arguments> testIdentifier() {
         return Stream.of(
                 Arguments.of("Alphabetic", "getName", true),
@@ -117,7 +116,7 @@ public class LexerTests {
                 Arguments.of("Comparison", "!=", true),
                 Arguments.of("AND", "&&", true),
                 Arguments.of("Space", " ", false),
-                Arguments.of("Tab", "\t", false)
+                Arguments.of("Tab", "\\t", false)
         );
     }
 
@@ -142,6 +141,20 @@ public class LexerTests {
                         new Token(Token.Type.STRING, "\"Hello, World!\"", 6),
                         new Token(Token.Type.OPERATOR, ")", 21),
                         new Token(Token.Type.OPERATOR, ";", 22)
+                )),
+                Arguments.of("Example 3", "for (int i = 0; i < 10) {", Arrays.asList(
+                        new Token(Token.Type.IDENTIFIER, "for", 0),
+                        new Token(Token.Type.OPERATOR, "(", 4),
+                        new Token(Token.Type.IDENTIFIER, "int",5),
+                        new Token(Token.Type.IDENTIFIER, "i",9),
+                        new Token(Token.Type.OPERATOR, "=", 11),
+                        new Token(Token.Type.INTEGER, "0",13),
+                        new Token(Token.Type.OPERATOR, ";",14),
+                        new Token(Token.Type.IDENTIFIER, "i",16),
+                        new Token(Token.Type.OPERATOR, "<",18),
+                        new Token(Token.Type.INTEGER, "10", 20),
+                        new Token(Token.Type.OPERATOR, ")",22),
+                        new Token(Token.Type.OPERATOR, "{", 24)
                 ))
         );
     }
@@ -184,7 +197,7 @@ public class LexerTests {
             Assertions.assertFalse(success, e.getMessage());
         }
     }
-
+/*
     @ParameterizedTest
     @MethodSource
     void testPeekSingleChar(String test, String source, boolean success, String pattern) {
@@ -222,6 +235,6 @@ public class LexerTests {
         );
     }
 
-
+*/
 
 }
