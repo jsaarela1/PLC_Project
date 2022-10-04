@@ -67,7 +67,8 @@ public class LexerTests {
                 Arguments.of("Trailing Decimal", "1.", false),
                 Arguments.of("Leading zero", "04.12", false),
                 Arguments.of("Leading Decimal", ".5", false),
-                Arguments.of("Multiple Decimal", "1.5.4", false)
+                Arguments.of("False test case", "15-10", false),
+                Arguments.of("Multiple Decimal", "1.2.3", false)
         );
     }
 
@@ -80,8 +81,10 @@ public class LexerTests {
     private static Stream<Arguments> testCharacter() {
         return Stream.of(
                 Arguments.of("Alphabetic", "\'c\'", true),
-                Arguments.of("Newline Escape", "\'\\n\'", true),
-                Arguments.of("Slash", "\'\\\\\'", true),
+                Arguments.of("tryna break code", "\'\\t\'", true),
+                Arguments.of("Single Escape", "'\\''", true),
+                Arguments.of("tryna break code2", "\'\\r\'", true),
+                Arguments.of("Slash", "\'\\\'", true),
                 Arguments.of("Empty", "\'\'", false),
                 Arguments.of("Multiple", "\'abc\'", false)
         );
@@ -96,7 +99,7 @@ public class LexerTests {
 
     private static Stream<Arguments> testString() {
         return Stream.of(
-                Arguments.of("Empty", "\"\"", true),
+                Arguments.of("Empty", "\"sq\\'dq\\\"bs\\\\\"", true),
                 Arguments.of("Alphabetic", "\"abc\"", true),
                 Arguments.of("Newline Escape", "\"Hello,\\nWorld\"", true),
                 Arguments.of("Unterminated", "\"unterminated", false),
@@ -116,7 +119,7 @@ public class LexerTests {
                 Arguments.of("Character", "(", true),
                 Arguments.of("Comparison", "!=", true),
                 Arguments.of("AND", "&&", true),
-                Arguments.of("Space", " ", false),
+                Arguments.of("Negative", "-", true),
                 Arguments.of("Tab", "\\t", false)
         );
     }
@@ -129,6 +132,57 @@ public class LexerTests {
 
     private static Stream<Arguments> testExamples() {
         return Stream.of(
+                Arguments.of("Big test case", "LET i = 1;\n" +
+                        "WHILE i != 100 DO\n" +
+                        "    IF rem(i, 3) == 0 && rem(i, 5) == 0 DO\n" +
+                        "        print(", Arrays.asList(
+                                new Token(Token.Type.IDENTIFIER, "LET", 0),
+                        new Token(Token.Type.IDENTIFIER, "i", 4),
+                        new Token(Token.Type.OPERATOR, "=", 6),
+                        new Token(Token.Type.INTEGER, "1", 8),
+                        new Token(Token.Type.OPERATOR, ";", 9),
+                        new Token(Token.Type.OPERATOR, "\\n", 10),
+                        new Token(Token.Type.IDENTIFIER, "WHILE", 11),
+                        new Token(Token.Type.IDENTIFIER, "i", 17),
+                        new Token(Token.Type.OPERATOR, "!=", 19),
+                        new Token(Token.Type.INTEGER, "100", 22),
+                        new Token(Token.Type.IDENTIFIER, "DO", 26),
+                        new Token(Token.Type.OPERATOR, "\\n", 28),
+                        new Token(Token.Type.IDENTIFIER, "IF", 33),
+                        new Token(Token.Type.IDENTIFIER, "rem", 36),
+                        new Token(Token.Type.OPERATOR, "(", 39),
+                        new Token(Token.Type.IDENTIFIER, "i", 40),
+                        new Token(Token.Type.OPERATOR, ",", 41),
+                        new Token(Token.Type.INTEGER, "3", 43),
+                        new Token(Token.Type.OPERATOR, ")", 44),
+                        new Token(Token.Type.OPERATOR, "==", 46),
+                        new Token(Token.Type.INTEGER, "0", 49),
+                        new Token(Token.Type.OPERATOR, "&&", 51),
+                        new Token(Token.Type.IDENTIFIER, "rem", 54),
+                        new Token(Token.Type.OPERATOR, "(", 57),
+                        new Token(Token.Type.IDENTIFIER, "i", 58),
+                        new Token(Token.Type.OPERATOR, ",", 59),
+                        new Token(Token.Type.INTEGER, "5", 61),
+                        new Token(Token.Type.OPERATOR, ")", 62),
+                        new Token(Token.Type.OPERATOR, "==", 64),
+                        new Token(Token.Type.INTEGER, "0", 67),
+                        new Token(Token.Type.IDENTIFIER, "DO", 69),
+                        new Token(Token.Type.OPERATOR, "\\n", 71),
+                        new Token(Token.Type.IDENTIFIER, "print", 80),
+                        new Token(Token.Type.OPERATOR, "(", 85)
+
+                        )),
+                Arguments.of("Example test", "x + 1 == y / 2.0 - 3", Arrays.asList(
+                        new Token(Token.Type.IDENTIFIER, "x", 0),
+                        new Token(Token.Type.OPERATOR, "+", 2),
+                        new Token(Token.Type.INTEGER, "1", 4),
+                        new Token(Token.Type.OPERATOR, "==", 6),
+                        new Token(Token.Type.IDENTIFIER, "y", 9),
+                        new Token(Token.Type.OPERATOR, "/", 11),
+                        new Token(Token.Type.DECIMAL, "2.0", 13),
+                        new Token(Token.Type.OPERATOR, "-", 17),
+                        new Token(Token.Type.INTEGER, "3", 19)
+                )),
                 Arguments.of("Example 1", "LET x = 5;", Arrays.asList(
                         new Token(Token.Type.IDENTIFIER, "LET", 0),
                         new Token(Token.Type.IDENTIFIER, "x", 4),

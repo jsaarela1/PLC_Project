@@ -30,17 +30,8 @@ public final class Lexer {
     public List<Token> lex() {
         List list = new ArrayList<>();
         while (chars.has(0)) {
-            // check for \b\n\r\t
-            if ((peek("[\\\\]")) && (chars.has(1))) {
-                // get the index of the next character and check for if it needs to be skipped over
-                char checkNext = chars.get(1);
-                if ((checkNext == 'b') || (checkNext == 'n') || (checkNext == 'r') || (checkNext == 't')) {
-                    chars.advance();
-                    chars.skip();
-                }
-            }
             // check to make sure it is not a space
-            else if (!peek("[ ]"))
+            if (!peek("[ ]"))
                 list.add(lexToken());
             // if it is a space
             else {
@@ -64,16 +55,25 @@ public final class Lexer {
     public Token lexToken() {
         if (peek("[A-Za-z]|[@]")) {
             return lexIdentifier();
-        } else if (peek("[0]|[-]|[1-9]")) {
+        }
+        else if (peek("[0]|[1-9]")) {
             return lexNumber(); // figure out how to differentiate integer vs a decimal
-        } else if (peek("[']")) {
+        }
+        else if ((peek("[-]")) && (chars.has(1))) {
+            char temp = chars.get(1);
+            if ((temp < 48)  || (temp > 57)) {
+                return lexOperator();
+            }
+            else {
+                return lexNumber();
+            }
+        }
+        else if (peek("[']")) {
             return lexCharacter();
-        } else if (peek("\"")) {
+        }
+        else if (peek("\"")) {
             return lexString();
-        } //else if (peek("[^ [\b]|[\n]|[\r]|[\t]]")) {
-            //return lexOperator();
-       // }
-        //throw new UnsupportedOperationException();
+        }
         return lexOperator();
     }
 
@@ -91,7 +91,6 @@ public final class Lexer {
     public Token lexNumber() {
         int current = chars.index; // keep track of current index, in case of errors
         boolean makeDecimal = false; // if a '.' is found, set to true and return a decimal
-
         boolean isNegative = false;
         boolean leadingZero = false;
 
@@ -126,49 +125,10 @@ public final class Lexer {
                 current++;
             }
         }
-        // if 0 is first digit
-        /*if (match("[0]")) {
-            current++;
-            if (match("[.]")) {
-                makeDecimal = true;
-                current++;
-                while (match("[1-9]"))
-                   current++;
-            }
-            // cannot have a leading 0
-            else if (peek("[0-9]"))
-                throw new ParseException("Invalid leading zero at index: ", current);
+        if ((makeDecimal) && peek("![0-9]")) {
+            throw new ParseException("Invalid decimal at index ", -1);
         }
-
-        // if negative
-        else if (match("[-]")) {
-            current++;
-            if (match("[1-9]")) {
-                current++;
-                while (peek("[0-9]|[.]"))
-                    if (match("[.]"))
-                        makeDecimal = true;
-                    else
-                        match("[0-9]");
-                    current++;
-            } else
-                throw new ParseException("Invalid negative number at index: ", current);
-        }
-
-        // everything else
-        else {
-            while (peek("[0-9]|[.]")) {
-                if (match("[.]")) {
-                    makeDecimal = true;
-                    if (!peek("[0-9]"))
-                        throw new ParseException("No numbers after the decimal point at index: ", current);
-                }
-                else
-                    match("[0-9]");
-                current++;
-            }
-        }
-         */
+        // if negative 0
         if (isNegative && !makeDecimal && leadingZero)
             throw new ParseException("Cannot have a negative zero. Check index: ", current);
         if (makeDecimal)
@@ -179,28 +139,24 @@ public final class Lexer {
 
     public Token lexCharacter() {
         int current = chars.index;
-        match("[']");
-        current++;
-
-        // check for the invalid characters
-        if (peek("[\\\\]")) {
-            match("[\\\\]");
+        if (chars.has(2)) {
+            match("[']");
             current++;
-            System.out.print("CHECK");
-            if (match("[^[n] | [r] | [\\\\]]"))
+            if (match("[^'\\n\\r\\\\]")) {
                 current++;
+            }
+            else {
+                lexEscape();
+            }
+            // check for a closing '
+            if (match("[']")) {
+                current++;
+            }
             else
-                throw new ParseException("Invalid character at index: ", current);
-        } else if (match("[^']"))
-            current++;
+                throw new ParseException("Character not enclosed in single quote at index: ", current);
+        }
         else
             throw new ParseException("Invalid character at index: ", current);
-
-        // check for a closing '
-        if (match("[']"))
-            current++;
-        else
-            throw new ParseException("Character not enclosed in single quote at index: ", current);
         return chars.emit(Token.Type.CHARACTER);
     }
 
@@ -208,9 +164,20 @@ public final class Lexer {
         int current = chars.index;
         match("\"");
         current++;
-
         // run until a double quote
-        while (peek("[^\"]")) {
+        while (peek("[^\"]"))
+        {
+            if (match("[^'\\n\\r\\\\]")) {
+                current++;
+            }
+            else {
+                lexEscape();
+                current++;
+                current++;
+            }
+        }
+
+        /*while (peek("[^\"]")) {
             if (peek("[\\\\]")) {
                 match("[\\\\]");
                 current++;
@@ -221,7 +188,7 @@ public final class Lexer {
                     throw new ParseException("Invalid string at index: ", current);
             } else if (match("[^\"]"))
                 current++;
-        }
+        }*/
         // check for a closing '
         if (match("\""))
             current++;
@@ -231,8 +198,20 @@ public final class Lexer {
     }
 
     public void lexEscape() {
-        System.out.println("escape");
-        throw new UnsupportedOperationException(); //TODO
+        if ((peek("[\\\\]")) && (chars.has(1))) {
+            // get the index of the next character and check for if it needs to be skipped over
+            char checkNext = chars.get(1);
+            chars.advance();
+            if ((checkNext == 'b') || (checkNext == 'n') || (checkNext == 'r') || (checkNext == 't')) {
+                chars.advance();
+            }
+            else if ((checkNext == '\'') || (checkNext == '"') || (checkNext == '\\')) {
+                chars.advance();
+            }
+            else {
+                throw new ParseException("Invalid escape", -1);
+            }
+        }
     }
 
     public Token lexOperator() {
@@ -240,19 +219,23 @@ public final class Lexer {
         if (match("[!]")) {
             current++;
             match("[=]");
-        } else if (match("[=]")) {
+        }
+        else if (match("[=]")) {
             current++;
             if (peek("[=]")) {
                 match("[=]");
                 current++;
             }
-        } else if (match("[&]")) {
+        }
+        else if (match("[&]")) {
             current++;
             match("[&]");
-        } else if (match("[|]")) {
+        }
+        else if (match("[|]")) {
             current++;
             match("[|]");
-        } else match("[^ ]");
+        }
+        else match("[^ ]");
         return chars.emit(Token.Type.OPERATOR);
     }
 
