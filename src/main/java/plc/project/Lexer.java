@@ -31,17 +31,16 @@ public final class Lexer {
         List list = new ArrayList<>();
         while (chars.has(0)) {
             // check to make sure it is not a space
-            if (!peek("[ ]"))
+            if (!peek("[ ]")) {
                 list.add(lexToken());
+            }
             // if it is a space
             else {
                 chars.advance();
                 chars.skip();
             }
         }
-
         return list;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -101,27 +100,36 @@ public final class Lexer {
         if (match("[-]")) {
             current++;
             isNegative = true;
-            if (match("[0]"))
+            if (match("[0]")) {
                 leadingZero = true;
+            }
         }
         while (peek("[0-9]|[.]|[-]")) {
-            if (isNegative && peek("[-]"))
+            if (isNegative && peek("[-]")) {
                 throw new ParseException("Invalid negative number at index: ", current);
-            else if (makeDecimal && peek("[.]"))
+            }
+            else if (makeDecimal && peek("[.]")) {
                 throw new ParseException("Invalid decimal at index: ", current);
-            else if (leadingZero && (!peek("[.]")))
+            }
+            else if (leadingZero && (!peek("[.]"))) {
                 throw new ParseException("Invalid number because of leading zero: ", current);
+            }
             else if (match("[-]")) {
                 current++;
                 isNegative = true;
-            } else if (match("[.]")) {
+            }
+            else if (match("[.]")) {
                 current++;
                 makeDecimal = true;
-                if (!peek("[0-9]"))
+                if (!peek("[0-9]")) {
                     throw new ParseException("No value after the decimal point at index: ", current);
+                }
                 // if it is a leading zero followed by a decimal, no error
-                if (leadingZero) leadingZero = false;
-            } else if (match("[0-9]")) {
+                if (leadingZero) {
+                    leadingZero = false;
+                }
+            }
+            else if (match("[0-9]")) {
                 current++;
             }
         }
@@ -129,12 +137,13 @@ public final class Lexer {
             throw new ParseException("Invalid decimal at index ", -1);
         }
         // if negative 0
-        if (isNegative && !makeDecimal && leadingZero)
+        if (isNegative && !makeDecimal && leadingZero) {
             throw new ParseException("Cannot have a negative zero. Check index: ", current);
-        if (makeDecimal)
+        }
+        if (makeDecimal) {
             return chars.emit(Token.Type.DECIMAL);
-        else
-            return chars.emit(Token.Type.INTEGER);
+        }
+        return chars.emit(Token.Type.INTEGER);
     }
 
     public Token lexCharacter() {
@@ -145,6 +154,9 @@ public final class Lexer {
             if (match("[^'\\n\\r\\\\]")) {
                 current++;
             }
+            else if (match("[\\\\]")) {
+                current++;
+            }
             else {
                 lexEscape();
             }
@@ -152,11 +164,13 @@ public final class Lexer {
             if (match("[']")) {
                 current++;
             }
-            else
+            else {
                 throw new ParseException("Character not enclosed in single quote at index: ", current);
+            }
         }
-        else
+        else {
             throw new ParseException("Invalid character at index: ", current);
+        }
         return chars.emit(Token.Type.CHARACTER);
     }
 
@@ -176,24 +190,13 @@ public final class Lexer {
                 current++;
             }
         }
-
-        /*while (peek("[^\"]")) {
-            if (peek("[\\\\]")) {
-                match("[\\\\]");
-                current++;
-                System.out.print("CHECK");
-                if (match("[^[n] | [r] | [\\\\]]"))
-                    current++;
-                else
-                    throw new ParseException("Invalid string at index: ", current);
-            } else if (match("[^\"]"))
-                current++;
-        }*/
         // check for a closing '
-        if (match("\""))
+        if (match("\"")) {
             current++;
-        else
+        }
+        else {
             throw new ParseException("Missing double quote at index: ", current);
+        }
         return chars.emit(Token.Type.STRING);
     }
 
@@ -208,7 +211,7 @@ public final class Lexer {
             else if ((checkNext == '\'') || (checkNext == '"') || (checkNext == '\\')) {
                 chars.advance();
             }
-            else {
+            else if (checkNext != '\'') {
                 throw new ParseException("Invalid escape", -1);
             }
         }
@@ -235,7 +238,9 @@ public final class Lexer {
             current++;
             match("[|]");
         }
-        else match("[^ ]");
+        else {
+            match("[^ ]");
+        }
         return chars.emit(Token.Type.OPERATOR);
     }
 
@@ -246,11 +251,11 @@ public final class Lexer {
      */
     public boolean peek(String... patterns) {
         for (int i = 0; i < patterns.length; i++) {
-            if (!chars.has(i) || !String.valueOf(chars.get(i)).matches(patterns[i]))
+            if (!chars.has(i) || !String.valueOf(chars.get(i)).matches(patterns[i])) {
                 return false;
+            }
         }
         return true;
-        //throw new UnsupportedOperationException(); //TODO (in Lecture)
     }
 
     /**
@@ -266,7 +271,6 @@ public final class Lexer {
             }
         }
         return peek;
-        //throw new UnsupportedOperationException(); //TODO (in Lecture)
     }
 
     /**
