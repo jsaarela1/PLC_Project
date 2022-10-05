@@ -154,9 +154,6 @@ public final class Lexer {
             if (match("[^'\\n\\r\\\\]")) {
                 current++;
             }
-            else if (match("[\\\\]")) {
-                current++;
-            }
             else {
                 lexEscape();
             }

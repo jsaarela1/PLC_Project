@@ -80,10 +80,10 @@ public class LexerTests {
 
     private static Stream<Arguments> testCharacter() {
         return Stream.of(
-                //Arguments.of("Alphabetic", "\'c\'", true),
-                //Arguments.of("tryna break code", "\'\\t\'", true),
-                //Arguments.of("Single Escape", "'\\''", true),
-                //Arguments.of("tryna break code2", "\'\\r\'", true),
+                Arguments.of("Alphabetic", "\'c\'", true),
+                Arguments.of("tryna break code", "\'\\t\'", true),
+                Arguments.of("Single Escape", "'\\''", true),
+                Arguments.of("tryna break code2", "\'\\r\'", true),
                 Arguments.of("Slash", "\'\\\'", true),
                 Arguments.of("Empty", "\'\'", false),
                 Arguments.of("Multiple", "\'abc\'", false)
