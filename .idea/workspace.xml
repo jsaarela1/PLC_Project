@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="lexer working correctly.">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="character slash test still failing. everything else working appropriately">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Lexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/LexerTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/ParserExpressionTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/ParserExpressionTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +94,7 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.LexerTests">
+  <component name="RunManager" selected="JUnit.ParserExpressionTests.testExpressionStatement">
     <configuration name="LexerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -158,7 +158,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LexerTests.testOperator" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ParserExpressionTests.testExpressionStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -167,8 +167,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.LexerTests" />
-      <option name="METHOD_NAME" value="testOperator(java.lang.String,java.lang.String,boolean)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.ParserExpressionTests" />
+      <option name="METHOD_NAME" value="testExpressionStatement(java.lang.String,java.util.List,plc.project.Ast$Statement$Expression)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -176,11 +176,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ParserExpressionTests.testExpressionStatement" />
         <item itemvalue="JUnit.LexerTests" />
         <item itemvalue="JUnit.LexerTests.testCharacter" />
         <item itemvalue="JUnit.LexerTests.testExamples" />
         <item itemvalue="JUnit.LexerTests.testDecimal" />
-        <item itemvalue="JUnit.LexerTests.testOperator" />
       </list>
     </recent_temporary>
   </component>
@@ -263,7 +263,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664933703297</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="character slash test still failing. everything else working appropriately">
+      <created>1664934428590</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1664934428590</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -287,6 +294,27 @@
     <MESSAGE value="rewrote integers/decimals" />
     <MESSAGE value="everything working except slash in character, and the newline" />
     <MESSAGE value="lexer working correctly." />
-    <option name="LAST_COMMIT_MESSAGE" value="lexer working correctly." />
+    <MESSAGE value="character slash test still failing. everything else working appropriately" />
+    <option name="LAST_COMMIT_MESSAGE" value="character slash test still failing. everything else working appropriately" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
+          <line>215</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
+          <line>193</line>
+          <properties class="plc.project.Parser" method="parsePrimaryExpression">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

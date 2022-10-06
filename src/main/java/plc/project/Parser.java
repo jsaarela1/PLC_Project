@@ -21,6 +21,9 @@ public final class Parser {
 
     public Parser(List<Token> tokens) {
         this.tokens = new TokenStream(tokens);
+        parseStatement();
+
+
     }
 
     /**
@@ -84,6 +87,7 @@ public final class Parser {
      * statement, then it is an expression/assignment statement.
      */
     public Ast.Statement parseStatement() throws ParseException {
+        parseExpression();
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -145,6 +149,7 @@ public final class Parser {
      * Parses the {@code expression} rule.
      */
     public Ast.Expression parseExpression() throws ParseException {
+        parseLogicalExpression();
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -152,6 +157,7 @@ public final class Parser {
      * Parses the {@code logical-expression} rule.
      */
     public Ast.Expression parseLogicalExpression() throws ParseException {
+        parseComparisonExpression();
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -159,6 +165,7 @@ public final class Parser {
      * Parses the {@code equality-expression} rule.
      */
     public Ast.Expression parseComparisonExpression() throws ParseException {
+        parseAdditiveExpression();
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -166,6 +173,7 @@ public final class Parser {
      * Parses the {@code additive-expression} rule.
      */
     public Ast.Expression parseAdditiveExpression() throws ParseException {
+        parseMultiplicativeExpression();
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -173,6 +181,7 @@ public final class Parser {
      * Parses the {@code multiplicative-expression} rule.
      */
     public Ast.Expression parseMultiplicativeExpression() throws ParseException {
+        parsePrimaryExpression();
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -183,7 +192,41 @@ public final class Parser {
      * not strictly necessary.
      */
     public Ast.Expression parsePrimaryExpression() throws ParseException {
+        if (peek("NIL")) {
+            match("NIL");
+        }
+        else if (peek("TRUE")) {
+            System.out.print("TRUE");
+        }
+        else if (peek("FALSE")) {
+            System.out.print("false");
+        }
+        else if (peek(Token.Type.IDENTIFIER)) {
+            match(Token.Type.IDENTIFIER);
+        }
+        else if (peek(Token.Type.DECIMAL)) {
+            System.out.print("GOT");
+        }
+        else if (peek(Token.Type.CHARACTER)) {
+            System.out.print("GOT");
+        }
+        else if (peek(Token.Type.STRING)) {
+            System.out.print("GOT");
+        }
+        else if (peek(Token.Type.OPERATOR)) {
+            // do more stuff
+            new Ast.Expression.Literal(Token.Type.INTEGER);
+                match(Token.Type.OPERATOR);
+            Ast.Expression expression = parseExpression();
+            match(Token.Type.OPERATOR);
+            return expression;
+        }
+        else if (peek(Token.Type.STRING)) {
+            System.out.print("GOT");
+        }
+        System.out.println("Hassan is a g");
         throw new UnsupportedOperationException(); //TODO
+        //return expression;
     }
 
     /**
@@ -197,7 +240,25 @@ public final class Parser {
      * {@code peek(Token.Type.IDENTIFIER)} and {@code peek("literal")}.
      */
     private boolean peek(Object... patterns) {
-        throw new UnsupportedOperationException(); //TODO (in lecture)
+        for (int i = 0; i < patterns.length; i++) {
+            if (!tokens.has(i)) {
+                return false;
+            }
+            else if (patterns[i] instanceof Token.Type) {
+                if (patterns[i] != tokens.get(i).getType()) {
+                    return false;
+                }
+            }
+            else if (patterns[i] instanceof String) {
+                if (!patterns.equals(tokens.get(i).getLiteral())) {
+                    return false;
+                }
+            }
+            else {
+                throw new AssertionError("Invalid pattern object: " + patterns[i].getClass());
+            }
+        }
+        return true;
     }
 
     /**
@@ -205,7 +266,13 @@ public final class Parser {
      * and advances the token stream.
      */
     private boolean match(Object... patterns) {
-        throw new UnsupportedOperationException(); //TODO (in lecture)
+        boolean peek = peek(patterns);
+        if (peek) {
+            for (int i = 0; i < patterns.length; i++) {
+                tokens.advance();
+            }
+        }
+        return peek;
     }
 
     private static final class TokenStream {
