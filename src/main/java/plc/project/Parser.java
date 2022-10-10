@@ -192,27 +192,20 @@ public final class Parser {
      * not strictly necessary.
      */
     public Ast.Expression parsePrimaryExpression() throws ParseException {
-        if (peek("NIL")) {
-            match("NIL");
+        if (match("NIL")) {
+            return new Ast.Expression.Literal(null);
         }
-        else if (peek("TRUE")) {
-            System.out.print("TRUE");
+        else if (match("TRUE")) {
+            return new Ast.Expression.Literal(true);
         }
-        else if (peek("FALSE")) {
-            System.out.print("false");
+        else if (match("FALSE")) {
+            return new Ast.Expression.Literal(false);
         }
-        else if (peek(Token.Type.IDENTIFIER)) {
-            match(Token.Type.IDENTIFIER);
+        else if (peek(Token.Type.INTEGER, Token.Type.DECIMAL, Token.Type.CHARACTER,
+                Token.Type.STRING)) {
+            return new Ast.Expression.Literal(this.tokens);
         }
-        else if (peek(Token.Type.DECIMAL)) {
-            System.out.print("GOT");
-        }
-        else if (peek(Token.Type.CHARACTER)) {
-            System.out.print("GOT");
-        }
-        else if (peek(Token.Type.STRING)) {
-            System.out.print("GOT");
-        }
+        /*
         else if (peek(Token.Type.OPERATOR)) {
             // do more stuff
             new Ast.Expression.Literal(Token.Type.INTEGER);
@@ -224,9 +217,8 @@ public final class Parser {
         else if (peek(Token.Type.STRING)) {
             System.out.print("GOT");
         }
-        System.out.println("Hassan is a g");
+        */
         throw new UnsupportedOperationException(); //TODO
-        //return expression;
     }
 
     /**
