@@ -87,8 +87,10 @@ public final class Parser {
      * statement, then it is an expression/assignment statement.
      */
     public Ast.Statement parseStatement() throws ParseException {
-        parseExpression();
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression expression = parseExpression();
+        Ast.Statement statement = new Ast.Statement.Expression(expression);
+        return statement;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -149,40 +151,45 @@ public final class Parser {
      * Parses the {@code expression} rule.
      */
     public Ast.Expression parseExpression() throws ParseException {
-        parseLogicalExpression();
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression expression = parseLogicalExpression();
+        return expression;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
      * Parses the {@code logical-expression} rule.
      */
     public Ast.Expression parseLogicalExpression() throws ParseException {
-        parseComparisonExpression();
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression expression = parseComparisonExpression();
+        return expression;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
      * Parses the {@code equality-expression} rule.
      */
     public Ast.Expression parseComparisonExpression() throws ParseException {
-        parseAdditiveExpression();
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression expression = parseAdditiveExpression();
+        return expression;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
      * Parses the {@code additive-expression} rule.
      */
     public Ast.Expression parseAdditiveExpression() throws ParseException {
-        parseMultiplicativeExpression();
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression expression = parseMultiplicativeExpression();
+        return expression;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
      * Parses the {@code multiplicative-expression} rule.
      */
     public Ast.Expression parseMultiplicativeExpression() throws ParseException {
-        parsePrimaryExpression();
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression expression = parsePrimaryExpression();
+        return expression;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -192,6 +199,8 @@ public final class Parser {
      * not strictly necessary.
      */
     public Ast.Expression parsePrimaryExpression() throws ParseException {
+        Ast.Expression.Binary group;
+        Ast.Expression returnExpression;
         if (match("NIL")) {
             return new Ast.Expression.Literal(null);
         }
@@ -205,19 +214,23 @@ public final class Parser {
                 Token.Type.STRING)) {
             return new Ast.Expression.Literal(this.tokens);
         }
-        /*
         else if (peek(Token.Type.OPERATOR)) {
             // do more stuff
-            new Ast.Expression.Literal(Token.Type.INTEGER);
-                match(Token.Type.OPERATOR);
-            Ast.Expression expression = parseExpression();
+            Ast.Expression expression1 = new Ast.Expression.Literal(Token.Type.OPERATOR);
             match(Token.Type.OPERATOR);
-            return expression;
+            //new Ast.Expression.Literal(Token.Type.IDENTIFIER);
+            Ast.Expression expression2 = parseExpression();
+            if (match(Token.Type.OPERATOR)) {
+                Ast.Expression expression3 = new Ast.Expression.Literal(Token.Type.OPERATOR);
+            }
+            return expression1;
+        }
+        else if (peek(Token.Type.IDENTIFIER)) {
+            return new Ast.Expression.Literal(Token.Type.IDENTIFIER);
         }
         else if (peek(Token.Type.STRING)) {
             System.out.print("GOT");
         }
-        */
         throw new UnsupportedOperationException(); //TODO
     }
 
