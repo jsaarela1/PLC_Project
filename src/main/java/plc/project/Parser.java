@@ -265,13 +265,7 @@ public final class Parser {
             }
             else {
                 throw new ParseException("Invalid String", -1);
-            }/*
-            if(match("\"")){
-                String name = tokens.get(0).getLiteral();
-                match("\"");
-                return new Ast.Expression.Access(Optional.empty(), name);
             }
-            throw new ParseException("Not valid string", -1);*/
         }
         else if (peek(Token.Type.OPERATOR)) {
             // do more stuff
