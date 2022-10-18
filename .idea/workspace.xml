@@ -93,38 +93,7 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ParserExpressionTests.testExpressionStatement">
-    <configuration name="LexerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PLC_Project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.LexerTests" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="LexerTests.testExamples" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PLC_Project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.LexerTests" />
-      <option name="METHOD_NAME" value="testExamples(java.lang.String,java.lang.String,java.util.List)" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.ParserExpressionTests.testLiteralExpression">
     <configuration name="ParserExpressionTests.testAccessExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -141,7 +110,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserExpressionTests.testExpressionStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ParserExpressionTests.testAssignmentStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -151,7 +120,39 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.ParserExpressionTests" />
-      <option name="METHOD_NAME" value="testExpressionStatement(java.lang.String,java.util.List,plc.project.Ast$Statement$Expression)" />
+      <option name="METHOD_NAME" value="testAssignmentStatement(java.lang.String,java.util.List,plc.project.Ast$Statement$Assignment)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ParserExpressionTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PLC_Project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.ParserExpressionTests" />
+      <option name="METHOD_NAME" value="testBinaryExpression(java.lang.String,java.util.List,plc.project.Ast$Expression$Binary)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ParserExpressionTests.testGroupExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PLC_Project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.ParserExpressionTests" />
+      <option name="METHOD_NAME" value="testGroupExpression(java.lang.String,java.util.List,plc.project.Ast$Expression$Group)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -175,11 +176,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ParserExpressionTests.testExpressionStatement" />
         <item itemvalue="JUnit.ParserExpressionTests.testLiteralExpression" />
-        <item itemvalue="JUnit.LexerTests.testExamples" />
+        <item itemvalue="JUnit.ParserExpressionTests.testGroupExpression" />
         <item itemvalue="JUnit.ParserExpressionTests.testAccessExpression" />
-        <item itemvalue="JUnit.LexerTests" />
+        <item itemvalue="JUnit.ParserExpressionTests.testBinaryExpression" />
+        <item itemvalue="JUnit.ParserExpressionTests.testAssignmentStatement" />
       </list>
     </recent_temporary>
   </component>
@@ -317,8 +318,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
-          <line>206</line>
-          <option name="timeStamp" value="13" />
+          <line>259</line>
+          <option name="timeStamp" value="27" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
