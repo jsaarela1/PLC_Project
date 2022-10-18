@@ -361,29 +361,19 @@ public final class Parser {
             // do more stuff
             String operator = tokens.get(-1).getLiteral();
             if (operator.equals("(")) {
+                String str = tokens.get(0).getLiteral();
+                List<Ast.Expression> list = new ArrayList<>();
                 Ast.Expression expression = parseExpression();
                 if (match(Token.Type.OPERATOR)) {
                     operator = tokens.get(-1).getLiteral();
                     if (operator.equals(")")) {
-                        Ast.Expression.Function function = new Ast.Expression.Function(expression.toString(), null);
+                        Ast.Expression.Function function = new Ast.Expression.Function(str, list);
                         return function;
                     }
                 }
-                //Ast.Expression.Function function = new Ast.Expression.Function();
-
             }
-            return new Ast.Expression.Literal(operator);
-            /*
-            new Ast.Expression.Literal(Token.Type.INTEGER);
-            match(Token.Type.OPERATOR);
-            Ast.Expression expression = parseExpression();
-            match(Token.Type.OPERATOR);
-            return expression;
-            */
-        } else {
-            throw new ParseException("Invalid primary expression", -1);
-            //TODO
         }
+        throw new ParseException("Invalid primary expression", -1);
         //return null;
     }
 

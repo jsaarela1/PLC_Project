@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="not operator">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="functionExpression + accessExpression working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
     </list>
@@ -93,7 +93,7 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ParserExpressionTests.testFunctionExpression">
+  <component name="RunManager" selected="JUnit.ParserExpressionTests">
     <configuration name="ParserExpressionTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -175,10 +175,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ParserExpressionTests.testFunctionExpression" />
         <item itemvalue="JUnit.ParserExpressionTests" />
-        <item itemvalue="JUnit.ParserExpressionTests.testAccessExpression" />
         <item itemvalue="JUnit.ParserExpressionTests.testExpressionStatement" />
+        <item itemvalue="JUnit.ParserExpressionTests.testFunctionExpression" />
+        <item itemvalue="JUnit.ParserExpressionTests.testAccessExpression" />
         <item itemvalue="JUnit.ParserExpressionTests.testAssignmentStatement" />
       </list>
     </recent_temporary>
@@ -304,7 +304,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666063182511</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="functionExpression + accessExpression working">
+      <created>1666069351629</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1666069351629</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -333,21 +340,7 @@
     <MESSAGE value="small update" />
     <MESSAGE value="char + str" />
     <MESSAGE value="not operator" />
-    <option name="LAST_COMMIT_MESSAGE" value="not operator" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/test/java/plc/project/ParserExpressionTests.java</url>
-          <line>222</line>
-          <properties class="plc.project.ParserExpressionTests" method="testFunctionExpression">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="47" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="functionExpression + accessExpression working" />
+    <option name="LAST_COMMIT_MESSAGE" value="functionExpression + accessExpression working" />
   </component>
 </project>
