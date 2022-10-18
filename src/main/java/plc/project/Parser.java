@@ -106,10 +106,12 @@ public final class Parser {
             return statement;
         }
         else if (str.equals("WH")) {
-            System.out.print("WHILE");
+            Ast.Statement.While statement = parseWhileStatement();
+            return statement;
         }
         else if (str.equals("RE")) {
-            System.out.print("RETURN");
+            Ast.Statement.Return statement = parseReturnStatement();
+            return statement;
         }
         Ast.Expression leftExpression = parseExpression();
         Ast.Statement statement = new Ast.Statement.Expression(leftExpression);
@@ -170,12 +172,6 @@ public final class Parser {
         else if (!temp.equals("END")) {
             throw new ParseException("Error missing END ", -1);
         }
-        /*str = tokens.get(0).toString();
-        str = str.substring(11,14);
-        if (!str.equals("END")) {
-            throw new ParseException("Missing END ", -1);
-        }
-        */
         Ast.Statement.If statement = new Ast.Statement.If(expression, thenList, elseList);
         return statement;
     }
@@ -204,7 +200,30 @@ public final class Parser {
      * {@code WHILE}.
      */
     public Ast.Statement.While parseWhileStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        String str = tokens.get(0).toString();
+        str = str.substring(11,16);
+        if (!str.equals("WHILE")) {
+            throw new ParseException("Not WHILE statement ", -1);
+        }
+        tokens.advance();
+        Ast.Expression expression = parseExpression();
+        str = tokens.get(0).toString();
+        str = str.substring(11,13);
+        if (!str.equals("DO")) {
+            throw new ParseException("Missing DO in statement", -1);
+        }
+        tokens.advance();
+        List<Ast.Statement> whileList = new ArrayList<>();
+        whileList = parseBlock();
+        // need to add the ; to statements
+        tokens.advance();
+        str = tokens.get(0).toString();
+        String temp = str.substring(11,14);
+        if (!temp.equals("END")) {
+            throw new ParseException("Error missing END ", -1);
+        }
+        Ast.Statement.While statement = new Ast.Statement.While(expression, whileList);
+        return statement;
     }
 
     /**
@@ -213,7 +232,20 @@ public final class Parser {
      * {@code RETURN}.
      */
     public Ast.Statement.Return parseReturnStatement() throws ParseException {
-        throw new UnsupportedOperationException();//TODO
+        String str = tokens.get(0).toString();
+        str = str.substring(11,17);
+        if (!str.equals("RETURN")) {
+            throw new ParseException("Not RETURN statement ", -1);
+        }
+        tokens.advance();
+        Ast.Expression expression = parseExpression();
+        str = tokens.get(0).toString();
+        str = str.substring(9,10);
+        if (!str.equals(";")) {
+            throw new ParseException("Missing semicolon to return statement", -1);
+        }
+        Ast.Statement.Return statement = new Ast.Statement.Return(expression);
+        return statement;
     }
 
     /**
