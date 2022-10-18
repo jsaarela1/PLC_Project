@@ -79,7 +79,12 @@ public final class Parser {
      * preceding token indicates the opening a block.
      */
     public List<Ast.Statement> parseBlock() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        // need to account for 0-infinity statements being allowed
+        List<Ast.Statement> list = new ArrayList<>();
+        Ast.Statement statement = parseStatement();
+        list.add(statement);
+        return list;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -88,14 +93,31 @@ public final class Parser {
      * statement, then it is an expression/assignment statement.
      */
     public Ast.Statement parseStatement() throws ParseException {
+        String str = tokens.get(0).toString();
+        str = str.substring(11,13);
+        if (str.equals("LE")) {
+            System.out.print("LET");
+        }
+        else if (str.equals("SW")) {
+            System.out.print("DO SWITCH");
+        }
+        else if (str.equals("IF")) {
+            Ast.Statement.If statement = parseIfStatement();
+            return statement;
+        }
+        else if (str.equals("WH")) {
+            System.out.print("WHILE");
+        }
+        else if (str.equals("RE")) {
+            System.out.print("RETURN");
+        }
         Ast.Expression leftExpression = parseExpression();
         Ast.Statement statement = new Ast.Statement.Expression(leftExpression);
         while (peek(Token.Type.OPERATOR)) {
-            String str = tokens.get(0).toString();
-            str = str.substring(9,10);
-            if (str.equals("=")) {
+            String str1 = tokens.get(0).toString();
+            str1 = str1.substring(9,10);
+            if (str1.equals("=")) {
                 match(Token.Type.OPERATOR);
-                String operator = tokens.get(-1).getLiteral();
                 Ast.Expression rightExpression = parseExpression();
                 statement = new Ast.Statement.Assignment(leftExpression, rightExpression);
             }
@@ -121,7 +143,41 @@ public final class Parser {
      * {@code IF}.
      */
     public Ast.Statement.If parseIfStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        String str = tokens.get(0).toString();
+        str = str.substring(11,13);
+        if (!str.equals("IF")) {
+            throw new ParseException("Not if statement ", -1);
+        }
+        tokens.advance();
+        Ast.Expression expression = parseExpression();
+        str = tokens.get(0).toString();
+        str = str.substring(11,13);
+        if (!str.equals("DO")) {
+            throw new ParseException("Missing DO in statement", -1);
+        }
+        tokens.advance();
+        List<Ast.Statement> thenList = new ArrayList<>();
+        List<Ast.Statement> elseList = new ArrayList<>();
+        thenList = parseBlock();
+        // need to add the ; to statements
+        tokens.advance();
+        str = tokens.get(0).toString();
+        String temp = str.substring(11,14);
+        if (temp.equals("ELS")) {
+            tokens.advance();
+            elseList = parseBlock();
+        }
+        else if (!temp.equals("END")) {
+            throw new ParseException("Error missing END ", -1);
+        }
+        /*str = tokens.get(0).toString();
+        str = str.substring(11,14);
+        if (!str.equals("END")) {
+            throw new ParseException("Missing END ", -1);
+        }
+        */
+        Ast.Statement.If statement = new Ast.Statement.If(expression, thenList, elseList);
+        return statement;
     }
 
     /**
@@ -269,12 +325,10 @@ public final class Parser {
         Ast.Expression expr = new Ast.Expression.Literal(null);
         if (match(Token.Type.INTEGER)) {
             String literal = tokens.get(-1).getLiteral();
-            //match(Token.Type.INTEGER);
             return new Ast.Expression.Literal(new BigInteger(literal));
         }
         else if (match(Token.Type.DECIMAL)) {
             String literal = tokens.get(-1).getLiteral();
-            //match(Token.Type.DECIMAL);
             return new Ast.Expression.Literal(new BigDecimal(literal));
         }
         else if (match(Token.Type.CHARACTER)) {
@@ -292,7 +346,6 @@ public final class Parser {
                 throw new ParseException("Invalid String", -1);
             }
         }
-        //NEEDS WORKS
         else if(match(Token.Type.IDENTIFIER)){
             String str = tokens.get(-1).getLiteral();
             if (str == "NIL") {
@@ -306,7 +359,6 @@ public final class Parser {
             }
             if (tokens.has(1)) {
                 String operator1 = tokens.get(0).toString();
-                //Ast.Expression operator1 = parseExpression();
                 operator1 = operator1.substring(9,10);
                 if (operator1.equals("[")) {
                     match(Token.Type.OPERATOR);
@@ -318,8 +370,6 @@ public final class Parser {
                         return accessExpression;
                     }
                 }
-                // creating ast.expression.function
-                // need to create a list
                 else if (operator1.equals("(")) {
                     match(Token.Type.OPERATOR);
                     List<Ast.Expression> list = new ArrayList<>();
@@ -345,12 +395,9 @@ public final class Parser {
                     }
                 }
             }
-            // identifier ('('  (expression (',' expression)*)? ')')?
-
             return new Ast.Expression.Access(Optional.empty(), str);
         }
         else if (match(Token.Type.OPERATOR)) {
-            // do more stuff
             String operator = tokens.get(-1).getLiteral();
             if (operator.equals("(")) {
                 String str = tokens.get(0).getLiteral();
@@ -365,7 +412,6 @@ public final class Parser {
             }
         }
         throw new ParseException("Invalid primary expression", -1);
-        //return null;
     }
 
     /**
