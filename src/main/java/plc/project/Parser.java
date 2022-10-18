@@ -349,26 +349,17 @@ public final class Parser {
 
             return new Ast.Expression.Access(Optional.empty(), str);
         }
-        else if(match("(")){
-            Ast.Expression expression = parseExpression();
-            if(!match(")")){
-                throw new ParseException("Expected Closing Parenthesis ",-1);
-                //TODO
-            }
-            return new Ast.Expression.Group(expression);
-        }
         else if (match(Token.Type.OPERATOR)) {
             // do more stuff
             String operator = tokens.get(-1).getLiteral();
             if (operator.equals("(")) {
                 String str = tokens.get(0).getLiteral();
-                List<Ast.Expression> list = new ArrayList<>();
                 Ast.Expression expression = parseExpression();
                 if (match(Token.Type.OPERATOR)) {
                     operator = tokens.get(-1).getLiteral();
                     if (operator.equals(")")) {
-                        Ast.Expression.Function function = new Ast.Expression.Function(str, list);
-                        return function;
+                        Ast.Expression.Group group = new Ast.Expression.Group(expression);
+                        return group;
                     }
                 }
             }
