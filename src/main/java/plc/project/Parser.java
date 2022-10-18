@@ -31,7 +31,37 @@ public final class Parser {
      * Parses the {@code source} rule.
      */
     public Ast.Source parseSource() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        List<Ast.Global> listGlobals = new ArrayList<>();
+        List<Ast.Function> listFunctions = new ArrayList<>();
+        if (!tokens.has(0)) {
+            return new Ast.Source(listGlobals, listFunctions);
+        }
+        String str = tokens.get(0).getLiteral();
+        // list of globals
+        while ((str.equals("LIST")) || (str.equals("VAR")) || (str.equals("VAL")) || (str.equals("FUN"))) {
+            if ((str.equals("LIST")) || (str.equals("VAR")) || (str.equals("VAL"))) {
+                Ast.Global global = parseGlobal();
+                listGlobals.add(global);
+            }
+            // list of functions
+            else if (str.equals("FUN")) {
+                Ast.Function function = parseFunction();
+                listFunctions.add(function);
+            }
+            if (tokens.has(0)) {
+                str = tokens.get(0).getLiteral();
+                if (str.equals(";")) {
+                    tokens.advance();
+                    if (tokens.has(0)) {
+                        str = tokens.get(0).getLiteral();
+                    }
+                }
+            }
+            else {
+                break;
+            }
+        }
+        return new Ast.Source(listGlobals, listFunctions);
     }
 
     /**
@@ -39,7 +69,27 @@ public final class Parser {
      * next tokens start a global, aka {@code LIST|VAL|VAR}.
      */
     public Ast.Global parseGlobal() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        String str = tokens.get(0).getLiteral();
+        Ast.Global global;
+        if (str.contains("LIST")) {
+            global = parseList();
+            str = tokens.get(0).getLiteral();
+        }
+        else if (str.contains("VAR")) {
+            global = parseMutable();
+            str = tokens.get(0).getLiteral();
+        }
+        else if (str.contains("VAL")) {
+            global = parseImmutable();
+            str = tokens.get(0).getLiteral();
+        }
+        else {
+            throw new ParseException("Invalid global ", tokens.index - 1);
+        }
+        if (!str.equals(";")) {
+            throw new ParseException("Missing semi-colon ", tokens.index);
+        }
+        return global;
     }
 
     /**
@@ -47,7 +97,40 @@ public final class Parser {
      * next token declares a list, aka {@code LIST}.
      */
     public Ast.Global parseList() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        String str = tokens.get(0).getLiteral();
+        if (!str.equals("LIST")) {
+            throw new ParseException("Invalid list ", tokens.index);
+        }
+        tokens.advance();
+        if (!match(Token.Type.IDENTIFIER)) {
+            throw new ParseException("List must be followed by identifier ", tokens.index);
+        }
+        String name = tokens.get(-1).getLiteral();
+        str = tokens.get(0).getLiteral();
+        if (!str.equals("=")) {
+            throw new ParseException("Identifier must be followed by an equal sign ", tokens.index);
+        }
+        tokens.advance();
+        str = tokens.get(0).getLiteral();
+        if (!str.equals("[")) {
+            throw new ParseException("Should be an open bracket ", tokens.index);
+        }
+        List<Ast.Expression> list = new ArrayList<>();
+        Ast.Expression expression = parseExpression();
+        list.add(expression);
+        str = tokens.get(0).getLiteral();
+        tokens.advance();
+        while (str.equals(",")) {
+            expression = parseExpression();
+            list.add(expression);
+            str = tokens.get(0).getLiteral();
+            tokens.advance();
+        }
+        if (!str.equals("]")) {
+            throw new ParseException("Should be a closed bracket ", tokens.index);
+        }
+        // not sure how to return the list in value of Ast.Global
+        return new Ast.Global(name, true, Optional.of(expression));
     }
 
     /**
@@ -55,7 +138,26 @@ public final class Parser {
      * next token declares a mutable global variable, aka {@code VAR}.
      */
     public Ast.Global parseMutable() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        String str = tokens.get(0).getLiteral();
+        if (!str.equals("VAR")) {
+            throw new ParseException("Invalid val ", tokens.index);
+        }
+        tokens.advance();
+        if (!match(Token.Type.IDENTIFIER)) {
+            throw new ParseException("Identifier must follow VAR ", tokens.index);
+        }
+        String name = tokens.get(-1).getLiteral();
+        // check if there are more tokens, if not return
+        if (!tokens.has(0)) {
+            return new Ast.Global(name, true, Optional.empty());
+        }
+        str = tokens.get(0).getLiteral();
+        if (!str.equals("=")) {
+            throw new ParseException("Invalid operator ", tokens.index);
+        }
+        tokens.advance();
+        Ast.Expression expression = parseExpression();
+        return new Ast.Global(name, true, Optional.of(expression));
     }
 
     /**
@@ -63,7 +165,22 @@ public final class Parser {
      * next token declares an immutable global variable, aka {@code VAL}.
      */
     public Ast.Global parseImmutable() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        String str = tokens.get(0).getLiteral();
+        if (!str.equals("VAL")) {
+            throw new ParseException("Invalid val ", tokens.index);
+        }
+        tokens.advance();
+        if (!match(Token.Type.IDENTIFIER)) {
+            throw new ParseException("Identifier must follow VAL ", tokens.index);
+        }
+        String name = tokens.get(-1).getLiteral();
+        str = tokens.get(0).getLiteral();
+        if (!str.equals("=")) {
+            throw new ParseException("Invalid operator ", tokens.index);
+        }
+        tokens.advance();
+        Ast.Expression expression = parseExpression();
+        return new Ast.Global(name, false, Optional.of(expression));
     }
 
     /**
@@ -71,7 +188,55 @@ public final class Parser {
      * next tokens start a method, aka {@code FUN}.
      */
     public Ast.Function parseFunction() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        String str = tokens.get(0).getLiteral();
+        if (!str.equals("FUN")) {
+            throw new ParseException("Invalid function ", -1);
+        }
+        tokens.advance();
+        if (!match(Token.Type.IDENTIFIER)) {
+            throw new ParseException("Missing identifier in function ", -1);
+        }
+        String strLiteral = tokens.get(-1).getLiteral();
+        str = tokens.get(0).getLiteral();
+        if (!str.equals("(")) {
+            throw new ParseException("Missing opening parenthesis ", -1);
+        }
+        tokens.advance();
+        List<String> parameters = new ArrayList<>();
+        if (match(Token.Type.IDENTIFIER)) {
+            parameters.add(tokens.get(-1).toString());
+            str = tokens.get(0).getLiteral();
+            while (str.equals(",")) {
+                tokens.advance();
+                if (match(Token.Type.IDENTIFIER)) {
+                    parameters.add(tokens.get(-1).toString());
+                    str = tokens.get(0).getLiteral();
+                }
+                else {
+                    throw new ParseException("Invalid identifier ", -1);
+                }
+            }
+        }
+        else {
+            str = tokens.get(0).getLiteral();
+        }
+        if (!str.equals(")")) {
+            throw new ParseException("Missing closing parenthesis ", -1);
+        }
+        tokens.advance();
+        str = tokens.get(0).getLiteral();
+        if (!str.equals("DO")) {
+            throw new ParseException("Missing DO ", -1);
+        }
+        tokens.advance();
+        List<Ast.Statement> statements = new ArrayList<>();
+        statements = parseBlock();
+
+        str = tokens.get(0).getLiteral();
+        if (!str.equals("END")) {
+            throw new ParseException("Invalid END to function ", -1);
+        }
+        return new Ast.Function(strLiteral, parameters, statements);
     }
 
     /**
@@ -81,10 +246,13 @@ public final class Parser {
     public List<Ast.Statement> parseBlock() throws ParseException {
         // need to account for 0-infinity statements being allowed
         List<Ast.Statement> list = new ArrayList<>();
-        Ast.Statement statement = parseStatement();
-        list.add(statement);
+        String str = tokens.get(0).getLiteral();
+        while (!((str.equals("END")) || (str.equals("ELSE")) || (str.equals("DEFAULT")))) {
+            Ast.Statement statement = parseStatement();
+            list.add(statement);
+            str = tokens.get(0).getLiteral();
+        }
         return list;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -93,31 +261,31 @@ public final class Parser {
      * statement, then it is an expression/assignment statement.
      */
     public Ast.Statement parseStatement() throws ParseException {
-        String str = tokens.get(0).toString();
-        str = str.substring(11,13);
-        if (str.equals("LE")) {
-            System.out.print("LET");
+        String str = tokens.get(0).getLiteral();
+        if (str.contains("LET")) {
+            Ast.Statement.Declaration statement = parseDeclarationStatement();
+            return statement;
         }
-        else if (str.equals("SW")) {
-            System.out.print("DO SWITCH");
+        else if (str.contains("SWITCH")) {
+            Ast.Statement.Switch statement = parseSwitchStatement();
+            return statement;
         }
-        else if (str.equals("IF")) {
+        else if (str.contains("IF")) {
             Ast.Statement.If statement = parseIfStatement();
             return statement;
         }
-        else if (str.equals("WH")) {
+        else if (str.contains("WHILE")) {
             Ast.Statement.While statement = parseWhileStatement();
             return statement;
         }
-        else if (str.equals("RE")) {
+        else if (str.contains("RETURN")) {
             Ast.Statement.Return statement = parseReturnStatement();
             return statement;
         }
         Ast.Expression leftExpression = parseExpression();
         Ast.Statement statement = new Ast.Statement.Expression(leftExpression);
         while (peek(Token.Type.OPERATOR)) {
-            String str1 = tokens.get(0).toString();
-            str1 = str1.substring(9,10);
+            String str1 = tokens.get(0).getLiteral();
             if (str1.equals("=")) {
                 match(Token.Type.OPERATOR);
                 Ast.Expression rightExpression = parseExpression();
@@ -127,6 +295,11 @@ public final class Parser {
                 break;
             }
         }
+        str = tokens.get(0).getLiteral();
+        if (!str.equals(";")) {
+            throw new ParseException("Needs a semi-colon at the end ", tokens.index);
+        }
+        tokens.advance();
         return statement;
     }
 
@@ -136,7 +309,27 @@ public final class Parser {
      * statement, aka {@code LET}.
      */
     public Ast.Statement.Declaration parseDeclarationStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        String str = tokens.get(0).getLiteral();
+        if (!str.equals("LET")) {
+            throw new ParseException("Invalid Let statement ", -1);
+        }
+        tokens.advance();
+        match(Token.Type.IDENTIFIER);
+        String strLiteral = tokens.get(-1).getLiteral();
+        str = tokens.get(0).getLiteral();
+        if (str.equals("=")) {
+            tokens.advance();
+            Ast.Expression expression = parseExpression();
+            str = tokens.get(0).getLiteral();
+            if (str.equals(";")) {
+                return new Ast.Statement.Declaration(strLiteral, Optional.of(expression));
+            }
+            throw new ParseException("Missing semicolon ", -1);
+        }
+        else if (str.equals(";")) {
+            return new Ast.Statement.Declaration(strLiteral, Optional.empty());
+        }
+        throw new ParseException("Invalid declarative statement ", -1);
     }
 
     /**
@@ -145,15 +338,13 @@ public final class Parser {
      * {@code IF}.
      */
     public Ast.Statement.If parseIfStatement() throws ParseException {
-        String str = tokens.get(0).toString();
-        str = str.substring(11,13);
+        String str = tokens.get(0).getLiteral();
         if (!str.equals("IF")) {
             throw new ParseException("Not if statement ", -1);
         }
         tokens.advance();
         Ast.Expression expression = parseExpression();
-        str = tokens.get(0).toString();
-        str = str.substring(11,13);
+        str = tokens.get(0).getLiteral();
         if (!str.equals("DO")) {
             throw new ParseException("Missing DO in statement", -1);
         }
@@ -161,15 +352,12 @@ public final class Parser {
         List<Ast.Statement> thenList = new ArrayList<>();
         List<Ast.Statement> elseList = new ArrayList<>();
         thenList = parseBlock();
-        // need to add the ; to statements
-        tokens.advance();
-        str = tokens.get(0).toString();
-        String temp = str.substring(11,14);
-        if (temp.equals("ELS")) {
+        str = tokens.get(0).getLiteral();
+        if (str.equals("ELSE")) {
             tokens.advance();
             elseList = parseBlock();
         }
-        else if (!temp.equals("END")) {
+        else if (!str.equals("END")) {
             throw new ParseException("Error missing END ", -1);
         }
         Ast.Statement.If statement = new Ast.Statement.If(expression, thenList, elseList);
@@ -182,7 +370,31 @@ public final class Parser {
      * {@code SWITCH}.
      */
     public Ast.Statement.Switch parseSwitchStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        String str = tokens.get(0).getLiteral();
+        if (!str.contains("SWITCH")) {
+            throw new ParseException("Not switch statement ", -1);
+        }
+        tokens.advance();
+        Ast.Expression expression = parseExpression();
+        List<Ast.Statement.Case> cases = new ArrayList<>();
+        str = tokens.get(0).getLiteral();
+        if (str.equals("CASE")) {
+            Ast.Statement.Case caseStatement = parseCaseStatement();
+            cases.add(caseStatement);
+        }
+        str = tokens.get(0).getLiteral();
+        if (!str.equals("DEFAULT")) {
+            throw new ParseException("Invalid Default statement ", -1);
+        }
+        tokens.advance();
+        List<Ast.Statement> defaultCases = new ArrayList<>();
+        defaultCases = parseBlock();
+        str = tokens.get(0).getLiteral();
+        if (!str.equals("END")) {
+            throw new ParseException("Invalid end statement ", -1);
+        }
+        Ast.Statement.Switch statement = new Ast.Statement.Switch(expression, cases);
+        return statement;
     }
 
     /**
@@ -191,7 +403,21 @@ public final class Parser {
      * default block of a switch statement, aka {@code CASE} or {@code DEFAULT}.
      */
     public Ast.Statement.Case parseCaseStatement() throws ParseException {
-        throw new UnsupportedOperationException(); //TODO
+        String str = tokens.get(0).getLiteral();
+        List<Ast.Statement> statements = new ArrayList<>();
+        if (str.equals("CASE")) {
+            tokens.advance();
+            Ast.Expression expression = parseExpression();
+            str = tokens.get(0).getLiteral();
+            if (!str.equals(":")) {
+                throw new ParseException("Missing colon in case statement ", -1);
+            }
+            tokens.advance();
+            statements = parseBlock();
+            Ast.Statement.Case caseStatement = new Ast.Statement.Case(Optional.of(expression), statements);
+            return caseStatement;
+        }
+        throw new ParseException("Invalid case statement ", -1); //TODO
     }
 
     /**
@@ -200,26 +426,21 @@ public final class Parser {
      * {@code WHILE}.
      */
     public Ast.Statement.While parseWhileStatement() throws ParseException {
-        String str = tokens.get(0).toString();
-        str = str.substring(11,16);
+        String str = tokens.get(0).getLiteral();
         if (!str.equals("WHILE")) {
             throw new ParseException("Not WHILE statement ", -1);
         }
         tokens.advance();
         Ast.Expression expression = parseExpression();
-        str = tokens.get(0).toString();
-        str = str.substring(11,13);
+        str = tokens.get(0).getLiteral();
         if (!str.equals("DO")) {
             throw new ParseException("Missing DO in statement", -1);
         }
         tokens.advance();
         List<Ast.Statement> whileList = new ArrayList<>();
         whileList = parseBlock();
-        // need to add the ; to statements
-        tokens.advance();
-        str = tokens.get(0).toString();
-        String temp = str.substring(11,14);
-        if (!temp.equals("END")) {
+        str = tokens.get(0).getLiteral();
+        if (!str.equals("END")) {
             throw new ParseException("Error missing END ", -1);
         }
         Ast.Statement.While statement = new Ast.Statement.While(expression, whileList);
@@ -232,15 +453,13 @@ public final class Parser {
      * {@code RETURN}.
      */
     public Ast.Statement.Return parseReturnStatement() throws ParseException {
-        String str = tokens.get(0).toString();
-        str = str.substring(11,17);
+        String str = tokens.get(0).getLiteral();
         if (!str.equals("RETURN")) {
             throw new ParseException("Not RETURN statement ", -1);
         }
         tokens.advance();
         Ast.Expression expression = parseExpression();
-        str = tokens.get(0).toString();
-        str = str.substring(9,10);
+        str = tokens.get(0).getLiteral();
         if (!str.equals(";")) {
             throw new ParseException("Missing semicolon to return statement", -1);
         }
@@ -262,8 +481,7 @@ public final class Parser {
     public Ast.Expression parseLogicalExpression() throws ParseException {
         Ast.Expression leftExpression = parseComparisonExpression();
         while (peek(Token.Type.OPERATOR)) {
-            String str = tokens.get(0).toString();
-            str = str.substring(9,11);
+            String str = tokens.get(0).getLiteral();
             if ((str.equals("&&")) || (str.equals("||"))) {
                 match(Token.Type.OPERATOR);
                 String operator = tokens.get(-1).getLiteral();
@@ -398,6 +616,7 @@ public final class Parser {
                     String operator2 = tokens.get(0).toString();
                     operator2 = operator2.substring(9,10);
                     if (operator2.equals("]")) {
+                        tokens.advance();
                         Ast.Expression.Access accessExpression = new Ast.Expression.Access(Optional.of(expression2), str);
                         return accessExpression;
                     }
@@ -408,6 +627,7 @@ public final class Parser {
                     String operator2 = tokens.get(0).toString();
                     operator2 = operator2.substring(9,10);
                     if (operator2.equals(")")) {
+                        tokens.advance();
                         return new Ast.Expression.Function(str, list);
                     }
                     Ast.Expression expression2 = parseExpression();
@@ -422,6 +642,7 @@ public final class Parser {
                         operator2 = operator2.substring(9,10);
                     }
                     if (operator2.equals(")")) {
+                        tokens.advance();
                         Ast.Expression.Function function = new Ast.Expression.Function(str, list);
                         return function;
                     }
