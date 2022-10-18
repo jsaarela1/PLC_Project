@@ -24,9 +24,6 @@ public final class Parser {
 
     public Parser(List<Token> tokens) {
         this.tokens = new TokenStream(tokens);
-        parseStatement();
-
-
     }
 
     /**
@@ -90,7 +87,22 @@ public final class Parser {
      * statement, then it is an expression/assignment statement.
      */
     public Ast.Statement parseStatement() throws ParseException {
-        return null; //TODO
+        Ast.Expression leftExpression = parseExpression();
+        Ast.Statement statement = new Ast.Statement.Expression(leftExpression);
+        while (peek(Token.Type.OPERATOR)) {
+            String str = tokens.get(0).toString();
+            str = str.substring(9,10);
+            if (str.equals("=")) {
+                match(Token.Type.OPERATOR);
+                String operator = tokens.get(-1).getLiteral();
+                Ast.Expression rightExpression = parseExpression();
+                statement = new Ast.Statement.Assignment(leftExpression, rightExpression);
+            }
+            else {
+                break;
+            }
+        }
+        return statement;
     }
 
     /**
@@ -151,13 +163,8 @@ public final class Parser {
      * Parses the {@code expression} rule.
      */
     public Ast.Expression parseExpression() throws ParseException {
-        Ast.Expression leftExpression = parseComparisonExpression();
-        while(match("&&") || match("||")){
-            String operator = tokens.get(-1).getLiteral();
-            Ast.Expression rightExpression = parseComparisonExpression();
-            leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
-        }
-        return leftExpression;
+        Ast.Expression expression = parseLogicalExpression();
+        return expression;
     }
 
     /**
@@ -165,10 +172,18 @@ public final class Parser {
      */
     public Ast.Expression parseLogicalExpression() throws ParseException {
         Ast.Expression leftExpression = parseComparisonExpression();
-        while(match("&&") || match("||")){
-            String operator = tokens.get(-1).getLiteral();
-            Ast.Expression rightExpression = parseComparisonExpression();
-            leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
+        while (peek(Token.Type.OPERATOR)) {
+            String str = tokens.get(0).toString();
+            str = str.substring(9,11);
+            if ((str.equals("&&")) || (str.equals("||"))) {
+                match(Token.Type.OPERATOR);
+                String operator = tokens.get(-1).getLiteral();
+                Ast.Expression rightExpression = parseLogicalExpression();
+                leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
+            }
+            else {
+                break;
+            }
         }
         return leftExpression;
     }
@@ -178,10 +193,25 @@ public final class Parser {
      */
     public Ast.Expression parseComparisonExpression() throws ParseException {
         Ast.Expression leftExpression = parseAdditiveExpression();
-        while(match("<") || match(">") || match("==") || match("!=")){
-            String operator = tokens.get(-1).getLiteral();
-            Ast.Expression rightExpression = parseAdditiveExpression();
-            leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
+        while (peek(Token.Type.OPERATOR)) {
+            String str = tokens.get(0).toString();
+            String str1 = str.substring(9,10);
+            String str2 = str.substring(9,11);
+            if ((str1.equals("<")) || (str1.equals(">"))) {
+                match(Token.Type.OPERATOR);
+                String operator = tokens.get(-1).getLiteral();
+                Ast.Expression rightExpression = parseLogicalExpression();
+                leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
+            }
+            else if ((str2.equals("==")) || (str2.equals("!="))) {
+                match(Token.Type.OPERATOR);
+                String operator = tokens.get(-1).getLiteral();
+                Ast.Expression rightExpression = parseLogicalExpression();
+                leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
+            }
+            else {
+                break;
+            }
         }
         return leftExpression;
     }
@@ -191,10 +221,18 @@ public final class Parser {
      */
     public Ast.Expression parseAdditiveExpression() {
         Ast.Expression leftExpression = parseMultiplicativeExpression();
-        while(match("+") || match("-")){
-            String operator = tokens.get(-1).getLiteral();
-            Ast.Expression rightExpression = parseMultiplicativeExpression();
-            leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
+        while (peek(Token.Type.OPERATOR)) {
+            String str = tokens.get(0).toString();
+            str = str.substring(9,10);
+            if ((str.equals("+")) || (str.equals("-"))) {
+                match(Token.Type.OPERATOR);
+                String operator = tokens.get(-1).getLiteral();
+                Ast.Expression rightExpression = parseLogicalExpression();
+                leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
+            }
+            else {
+                break;
+            }
         }
         return leftExpression;
     }
@@ -204,10 +242,18 @@ public final class Parser {
      */
     public Ast.Expression parseMultiplicativeExpression() {
         Ast.Expression leftExpression = parsePrimaryExpression();
-        while(match("*") || match("/")|| match("^")){
-            String operator = tokens.get(-1).getLiteral();
-            Ast.Expression rightExpression = parsePrimaryExpression();
-            leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
+        while (peek(Token.Type.OPERATOR)) {
+            String str = tokens.get(0).toString();
+            str = str.substring(9,10);
+            if ((str.equals("*")) || (str.equals("/")) || (str.equals("^"))) {
+                match(Token.Type.OPERATOR);
+                String operator = tokens.get(-1).getLiteral();
+                Ast.Expression rightExpression = parseLogicalExpression();
+                leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
+            }
+            else {
+                break;
+            }
         }
         return leftExpression;
     }
@@ -220,16 +266,7 @@ public final class Parser {
      */
     public Ast.Expression parsePrimaryExpression() throws ParseException {
         Ast.Expression expr = new Ast.Expression.Literal(null);
-        if (match("NIL")) {
-            return new Ast.Expression.Literal(null);
-        }
-        else if (match("TRUE")) {
-            return new Ast.Expression.Literal(true);
-        }
-        else if (match("FALSE")) {
-            return new Ast.Expression.Literal(false);
-        }
-        else if (match(Token.Type.INTEGER)) {
+        if (match(Token.Type.INTEGER)) {
             String literal = tokens.get(-1).getLiteral();
             //match(Token.Type.INTEGER);
             return new Ast.Expression.Literal(new BigInteger(literal));
@@ -241,8 +278,17 @@ public final class Parser {
         }
         //NEEDS WORKS
         else if(match(Token.Type.IDENTIFIER)){
-            String name = tokens.get(-1).getLiteral();
-            return new Ast.Expression.Access(Optional.empty(), name);
+            String str = tokens.get(-1).getLiteral();
+            if (str == "NIL") {
+                return new Ast.Expression.Literal(null);
+            }
+            else if (str == "TRUE") {
+                return new Ast.Expression.Literal(true);
+            }
+            else if (str == "FALSE") {
+                return new Ast.Expression.Literal(false);
+            }
+            return new Ast.Expression.Access(Optional.empty(), str);
         }
         else if(match("(")){
             Ast.Expression expression = parseExpression();
@@ -267,14 +313,23 @@ public final class Parser {
                 throw new ParseException("Invalid String", -1);
             }
         }
-        else if (peek(Token.Type.OPERATOR)) {
+        else if (match(Token.Type.OPERATOR)) {
             // do more stuff
+            String operator = tokens.get(-1).getLiteral();
+            if (operator.equals("(")) {
+                match(Token.Type.OPERATOR);
+                Ast.Expression expression = parseExpression();
 
+
+            }
+            return new Ast.Expression.Literal(operator);
+            /*
             new Ast.Expression.Literal(Token.Type.INTEGER);
             match(Token.Type.OPERATOR);
             Ast.Expression expression = parseExpression();
             match(Token.Type.OPERATOR);
             return expression;
+            */
         } else {
             throw new ParseException("Invalid primary expression", -1);
             //TODO
