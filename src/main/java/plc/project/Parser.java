@@ -2,6 +2,7 @@ package plc.project;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -276,28 +277,6 @@ public final class Parser {
             //match(Token.Type.DECIMAL);
             return new Ast.Expression.Literal(new BigDecimal(literal));
         }
-        //NEEDS WORKS
-        else if(match(Token.Type.IDENTIFIER)){
-            String str = tokens.get(-1).getLiteral();
-            if (str == "NIL") {
-                return new Ast.Expression.Literal(null);
-            }
-            else if (str == "TRUE") {
-                return new Ast.Expression.Literal(true);
-            }
-            else if (str == "FALSE") {
-                return new Ast.Expression.Literal(false);
-            }
-            return new Ast.Expression.Access(Optional.empty(), str);
-        }
-        else if(match("(")){
-            Ast.Expression expression = parseExpression();
-            if(!match(")")){
-                throw new ParseException("Expected Closing Parenthesis ",-1);
-                //TODO
-            }
-            return new Ast.Expression.Group(expression);
-        }
         else if (match(Token.Type.CHARACTER)) {
             String character = tokens.get(-1).toString();
             char x = character.charAt(11);
@@ -313,13 +292,84 @@ public final class Parser {
                 throw new ParseException("Invalid String", -1);
             }
         }
+        //NEEDS WORKS
+        else if(match(Token.Type.IDENTIFIER)){
+            String str = tokens.get(-1).getLiteral();
+            if (str == "NIL") {
+                return new Ast.Expression.Literal(null);
+            }
+            else if (str == "TRUE") {
+                return new Ast.Expression.Literal(true);
+            }
+            else if (str == "FALSE") {
+                return new Ast.Expression.Literal(false);
+            }
+            if (tokens.has(1)) {
+                String operator1 = tokens.get(0).toString();
+                //Ast.Expression operator1 = parseExpression();
+                operator1 = operator1.substring(9,10);
+                if (operator1.equals("[")) {
+                    match(Token.Type.OPERATOR);
+                    Ast.Expression expression2 = parseExpression();
+                    String operator2 = tokens.get(0).toString();
+                    operator2 = operator2.substring(9,10);
+                    if (operator2.equals("]")) {
+                        Ast.Expression.Access accessExpression = new Ast.Expression.Access(Optional.of(expression2), str);
+                        return accessExpression;
+                    }
+                }
+                // creating ast.expression.function
+                // need to create a list
+                else if (operator1.equals("(")) {
+                    match(Token.Type.OPERATOR);
+                    List<Ast.Expression> list = new ArrayList<>();
+                    String operator2 = tokens.get(0).toString();
+                    operator2 = operator2.substring(9,10);
+                    if (operator2.equals(")")) {
+                        return new Ast.Expression.Function(str, list);
+                    }
+                    Ast.Expression expression2 = parseExpression();
+                    list.add(expression2);
+                    operator2 = tokens.get(0).toString();
+                    operator2 = operator2.substring(9,10);
+                    while (operator2.equals(",")) {
+                        match(Token.Type.OPERATOR);
+                        Ast.Expression tempExpression = parseExpression();
+                        list.add(tempExpression);
+                        operator2 = tokens.get(0).toString();
+                        operator2 = operator2.substring(9,10);
+                    }
+                    if (operator2.equals(")")) {
+                        Ast.Expression.Function function = new Ast.Expression.Function(str, list);
+                        return function;
+                    }
+                }
+            }
+            // identifier ('('  (expression (',' expression)*)? ')')?
+
+            return new Ast.Expression.Access(Optional.empty(), str);
+        }
+        else if(match("(")){
+            Ast.Expression expression = parseExpression();
+            if(!match(")")){
+                throw new ParseException("Expected Closing Parenthesis ",-1);
+                //TODO
+            }
+            return new Ast.Expression.Group(expression);
+        }
         else if (match(Token.Type.OPERATOR)) {
             // do more stuff
             String operator = tokens.get(-1).getLiteral();
             if (operator.equals("(")) {
-                match(Token.Type.OPERATOR);
                 Ast.Expression expression = parseExpression();
-
+                if (match(Token.Type.OPERATOR)) {
+                    operator = tokens.get(-1).getLiteral();
+                    if (operator.equals(")")) {
+                        Ast.Expression.Function function = new Ast.Expression.Function(expression.toString(), null);
+                        return function;
+                    }
+                }
+                //Ast.Expression.Function function = new Ast.Expression.Function();
 
             }
             return new Ast.Expression.Literal(operator);
