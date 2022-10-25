@@ -273,7 +273,7 @@ public final class Parser {
         // need to account for 0-infinity statements being allowed
         List<Ast.Statement> list = new ArrayList<>();
         String str = tokens.get(0).getLiteral();
-        while ((tokens.has(0)) && (!((str.equals("END")) || (str.equals("ELSE")) || (str.equals("DEFAULT"))))) {
+        while ((tokens.has(0)) && (!((str.equals("END")) || (str.equals("ELSE")) || (str.equals("DEFAULT")) || (str.equals("CASE"))))) {
             Ast.Statement statement = parseStatement();
             list.add(statement);
             if (tokens.has(0)) {
@@ -411,17 +411,28 @@ public final class Parser {
         Ast.Expression expression = parseExpression();
         List<Ast.Statement.Case> cases = new ArrayList<>();
         str = tokens.get(0).getLiteral();
-        if (str.equals("CASE")) {
+        while (str.equals("CASE")) {
             Ast.Statement.Case caseStatement = parseCaseStatement();
             cases.add(caseStatement);
+            if (tokens.has(0)) {
+                str = tokens.get(0).getLiteral();
+            }
+            else {
+                throw new ParseException("Invalid case statement ", tokens.index - 1);
+            }
         }
-        str = tokens.get(0).getLiteral();
         if (!str.equals("DEFAULT")) {
             throw new ParseException("Invalid Default statement ", tokens.index - 1);
         }
         tokens.advance();
         List<Ast.Statement> defaultCases = new ArrayList<>();
         defaultCases = parseBlock();
+        if (defaultCases.size() == 0) {
+            throw new ParseException("Missing DEFAULT statement ", tokens.index - 1);
+        }
+        if (!tokens.has(0)) {
+            throw new ParseException("Missing END statement ", tokens.index - 1);
+        }
         str = tokens.get(0).getLiteral();
         if (!str.equals("END")) {
             throw new ParseException("Invalid end statement ", tokens.index - 1);
