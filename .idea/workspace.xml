@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="everything working minus escape characters test in string">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="updates">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" afterDir="false" />
@@ -94,7 +94,7 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ParserTests.testWhileStatement">
+  <component name="RunManager" selected="JUnit.ParserTests.testBinaryExpression">
     <configuration name="ParserTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -177,9 +177,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ParserTests.testBinaryExpression" />
         <item itemvalue="JUnit.ParserTests.testWhileStatement" />
         <item itemvalue="JUnit.ParserTests.testLiteralExpression" />
-        <item itemvalue="JUnit.ParserTests.testBinaryExpression" />
         <item itemvalue="JUnit.ParserTests.testReturnStatement" />
         <item itemvalue="JUnit.ParserTests.testIfStatement" />
       </list>
@@ -348,7 +348,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666126826719</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="updates">
+      <created>1666667124013</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1666667124013</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -383,7 +390,8 @@
     <MESSAGE value="if statement mostly done. edits needed to be made are in the comments" />
     <MESSAGE value="if, while, return basically taken care of. just need to clean up the statement* in block and add the ; to statements" />
     <MESSAGE value="everything working minus escape characters test in string" />
-    <option name="LAST_COMMIT_MESSAGE" value="everything working minus escape characters test in string" />
+    <MESSAGE value="updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="updates" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

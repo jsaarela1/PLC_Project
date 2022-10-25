@@ -522,7 +522,7 @@ public final class Parser {
             if ((str.equals("&&")) || (str.equals("||"))) {
                 match(Token.Type.OPERATOR);
                 String operator = tokens.get(-1).getLiteral();
-                Ast.Expression rightExpression = parseLogicalExpression();
+                Ast.Expression rightExpression = parseComparisonExpression();
                 leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
             }
             else {
@@ -544,7 +544,7 @@ public final class Parser {
             if ((str1.equals("<")) || (str1.equals(">"))) {
                 match(Token.Type.OPERATOR);
                 String operator = tokens.get(-1).getLiteral();
-                Ast.Expression rightExpression = parseLogicalExpression();
+                Ast.Expression rightExpression = parseAdditiveExpression();
                 leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
             }
             else if ((str2.equals("==")) || (str2.equals("!="))) {
@@ -571,7 +571,7 @@ public final class Parser {
             if ((str.equals("+")) || (str.equals("-"))) {
                 match(Token.Type.OPERATOR);
                 String operator = tokens.get(-1).getLiteral();
-                Ast.Expression rightExpression = parseLogicalExpression();
+                Ast.Expression rightExpression = parseMultiplicativeExpression();
                 leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
             }
             else {
@@ -592,7 +592,7 @@ public final class Parser {
             if ((str.equals("*")) || (str.equals("/")) || (str.equals("^"))) {
                 match(Token.Type.OPERATOR);
                 String operator = tokens.get(-1).getLiteral();
-                Ast.Expression rightExpression = parseLogicalExpression();
+                Ast.Expression rightExpression = parsePrimaryExpression();
                 leftExpression = new Ast.Expression.Binary(operator,leftExpression,rightExpression);
             }
             else {
