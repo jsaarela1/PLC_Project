@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="updates">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="fixed comparison">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" afterDir="false" />
@@ -94,7 +94,7 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ParserTests.testBinaryExpression">
+  <component name="RunManager" selected="JUnit.ParserTests.testSource">
     <configuration name="ParserTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -111,7 +111,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTests.testIfStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ParserTests.testDeclarationStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -121,7 +121,23 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testIfStatement(java.lang.String,java.util.List,plc.project.Ast$Statement$If)" />
+      <option name="METHOD_NAME" value="testDeclarationStatement(java.lang.String,java.util.List,plc.project.Ast$Statement$Declaration)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ParserTests.testGroupExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PLC_Project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
+      <option name="METHOD_NAME" value="testGroupExpression(java.lang.String,java.util.List,plc.project.Ast$Expression$Group)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -143,7 +159,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTests.testReturnStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ParserTests.testSource" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -153,23 +169,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testReturnStatement(java.lang.String,java.util.List,plc.project.Ast$Statement$Return)" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ParserTests.testWhileStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PLC_Project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testWhileStatement(java.lang.String,java.util.List,plc.project.Ast$Statement$While)" />
+      <option name="METHOD_NAME" value="testSource(java.lang.String,java.util.List,plc.project.Ast$Source)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -177,11 +177,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ParserTests.testSource" />
         <item itemvalue="JUnit.ParserTests.testBinaryExpression" />
-        <item itemvalue="JUnit.ParserTests.testWhileStatement" />
+        <item itemvalue="JUnit.ParserTests.testDeclarationStatement" />
+        <item itemvalue="JUnit.ParserTests.testGroupExpression" />
         <item itemvalue="JUnit.ParserTests.testLiteralExpression" />
-        <item itemvalue="JUnit.ParserTests.testReturnStatement" />
-        <item itemvalue="JUnit.ParserTests.testIfStatement" />
       </list>
     </recent_temporary>
   </component>
@@ -355,7 +355,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666667124013</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="fixed comparison">
+      <created>1666726602634</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1666726602634</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -391,32 +398,15 @@
     <MESSAGE value="if, while, return basically taken care of. just need to clean up the statement* in block and add the ; to statements" />
     <MESSAGE value="everything working minus escape characters test in string" />
     <MESSAGE value="updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="updates" />
+    <MESSAGE value="fixed comparison" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed comparison" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
-          <line>32</line>
-          <properties class="plc.project.Parser" method="parseSource">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="93" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java</url>
-          <line>24</line>
-          <properties class="plc.project.ParserTests" method="testSource">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="103" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java</url>
-          <line>147</line>
+          <line>157</line>
           <properties class="plc.project.ParserTests" method="testIfStatement">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -425,7 +415,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java</url>
-          <line>278</line>
+          <line>288</line>
           <properties class="plc.project.ParserTests" method="testReturnStatement">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -434,27 +424,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java</url>
-          <line>366</line>
-          <properties class="plc.project.ParserTests" method="testBinaryExpression">
+          <line>24</line>
+          <properties class="plc.project.ParserTests" method="testSource">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
-          <option name="timeStamp" value="106" />
+          <option name="timeStamp" value="112" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
-          <line>123</line>
-          <option name="timeStamp" value="99" />
+          <line>708</line>
+          <option name="timeStamp" value="110" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
-          <line>257</line>
-          <option name="timeStamp" value="102" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
-          <line>707</line>
-          <option name="timeStamp" value="108" />
+          <line>42</line>
+          <option name="timeStamp" value="113" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

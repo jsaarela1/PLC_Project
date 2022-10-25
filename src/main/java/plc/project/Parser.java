@@ -105,6 +105,7 @@ public final class Parser {
         if (!str.equals(";")) {
             throw new ParseException("Missing semi-colon ", tokens.index - 1);
         }
+        tokens.advance();
         return global;
     }
 
@@ -260,6 +261,7 @@ public final class Parser {
         if ((!tokens.has(0)) || (!tokens.get(0).getLiteral().equals("END"))) {
             throw new ParseException("Invalid END to function ", -1);
         }
+        tokens.advance();
         return new Ast.Function(strLiteral, parameters, statements);
     }
 
@@ -705,7 +707,6 @@ public final class Parser {
                 }
             }
         }
-        int x = tokens.index;
         throw new ParseException("Invalid primary expression", tokens.index - 1);
     }
 
