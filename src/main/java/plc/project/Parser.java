@@ -632,14 +632,23 @@ public final class Parser {
             return new Ast.Expression.Literal(new BigDecimal(literal));
         }
         else if (match(Token.Type.CHARACTER)) {
-            String character = tokens.get(-1).toString();
-            char x = character.charAt(11);
-            return new Ast.Expression.Literal(x);
+            String character = tokens.get(-1).getLiteral();
+            if (character.length() == 3) {
+                char x = character.charAt(1);
+                return new Ast.Expression.Literal(x);
+            }
+            character = character.substring(1,4);
+            return new Ast.Expression.Literal(character);
         }
         else if (match(Token.Type.STRING)) {
             String str = tokens.get(-1).getLiteral();
             if ((str.charAt(0) == '\"') && (str.charAt(str.length()-1) == '\"')) {
                 str = str.substring(1, str.length()-1);
+                for (int i = 1; i < str.length() - 1; i++) {
+                    if ((str.charAt(i) == '\'') && (str.charAt(i) == '\'')) {
+                        str.replace("\\\\", "\\");
+                    }
+                }
                 return new Ast.Expression.Literal(str);
             }
             else {

@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="up to date">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="fixed the switch">
+      <change afterPath="$PROJECT_DIR$/src/main/java/plc/project/Environment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/plc/project/Scope.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Ast.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Ast.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/ParserExpressionTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/ParserExpressionTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -94,8 +100,8 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ParserTests.testDeclarationStatement">
-    <configuration name="ParserTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.InterpreterTests.testDeclarationStatement">
+    <configuration name="InterpreterTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -104,14 +110,29 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testBinaryExpression(java.lang.String,java.util.List,plc.project.Ast$Expression$Binary)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="InterpreterTests.testDeclarationStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PLC_Project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
+      <option name="METHOD_NAME" value="testDeclarationStatement(java.lang.String,plc.project.Ast$Statement$Declaration,java.lang.Object)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTests.testDeclarationStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="InterpreterTests.testGroupExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -120,14 +141,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testDeclarationStatement(java.lang.String,java.util.List,plc.project.Ast$Statement$Declaration)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
+      <option name="METHOD_NAME" value="testGroupExpression(java.lang.String,plc.project.Ast,java.lang.Object)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTests.testGroupExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="InterpreterTests.testListAccessExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -136,14 +157,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testGroupExpression(java.lang.String,java.util.List,plc.project.Ast$Expression$Group)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
+      <option name="METHOD_NAME" value="testListAccessExpression" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTests.testLiteralExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="InterpreterTests.testPlcList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -152,24 +173,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testLiteralExpression(java.lang.String,java.util.List,plc.project.Ast$Expression$Literal)" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ParserTests.testSource" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PLC_Project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testSource(java.lang.String,java.util.List,plc.project.Ast$Source)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
+      <option name="METHOD_NAME" value="testPlcList" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -177,11 +182,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ParserTests.testDeclarationStatement" />
-        <item itemvalue="JUnit.ParserTests.testSource" />
-        <item itemvalue="JUnit.ParserTests.testBinaryExpression" />
-        <item itemvalue="JUnit.ParserTests.testGroupExpression" />
-        <item itemvalue="JUnit.ParserTests.testLiteralExpression" />
+        <item itemvalue="JUnit.InterpreterTests.testDeclarationStatement" />
+        <item itemvalue="JUnit.InterpreterTests" />
+        <item itemvalue="JUnit.InterpreterTests.testPlcList" />
+        <item itemvalue="JUnit.InterpreterTests.testListAccessExpression" />
+        <item itemvalue="JUnit.InterpreterTests.testGroupExpression" />
       </list>
     </recent_temporary>
   </component>
@@ -376,7 +381,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666730627560</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="fixed the switch">
+      <created>1666733397681</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1666733397681</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -414,15 +426,16 @@
     <MESSAGE value="updates" />
     <MESSAGE value="fixed comparison" />
     <MESSAGE value="up to date" />
-    <option name="LAST_COMMIT_MESSAGE" value="up to date" />
+    <MESSAGE value="fixed the switch" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed the switch" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java</url>
-          <line>164</line>
-          <properties class="plc.project.ParserTests" method="testIfStatement">
+          <line>264</line>
+          <properties class="plc.project.ParserTests" method="testReturnStatement">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
@@ -430,7 +443,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java</url>
-          <line>295</line>
+          <line>271</line>
           <properties class="plc.project.ParserTests" method="testReturnStatement">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -447,29 +460,53 @@
           <option name="timeStamp" value="112" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java</url>
-          <line>100</line>
-          <properties class="plc.project.ParserTests" method="testDeclarationStatement">
+          <url>file://$PROJECT_DIR$/src/test/java/plc/project/ParserExpressionTests.java</url>
+          <line>69</line>
+          <properties class="plc.project.ParserExpressionTests" method="testLiteralExpression">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
-          <option name="timeStamp" value="117" />
+          <option name="timeStamp" value="123" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java</url>
+          <line>116</line>
+          <properties class="plc.project.InterpreterTests" method="testExpressionStatement">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="127" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
+          <line>63</line>
+          <properties class="plc.project.Interpreter" method="visit">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="139" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
-          <line>719</line>
+          <line>728</line>
           <option name="timeStamp" value="110" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/plc/project/ParserTests.java</url>
-          <line>101</line>
-          <option name="timeStamp" value="116" />
+          <line>96</line>
+          <option name="timeStamp" value="119" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
+          <line>70</line>
+          <option name="timeStamp" value="133" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="JUnit">
         <watch expression="tokens" language="JAVA" />
+        <watch expression="returnList" />
       </configuration>
     </watches-manager>
   </component>

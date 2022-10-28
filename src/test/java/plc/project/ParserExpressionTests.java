@@ -73,7 +73,7 @@ final class ParserExpressionTests {
 
     private static Stream<Arguments> testLiteralExpression() {
         return Stream.of(
-                Arguments.of("Boolean Literal",
+                /*Arguments.of("Boolean Literal",
                         Arrays.asList(new Token(Token.Type.IDENTIFIER, "TRUE", 0)),
                         new Ast.Expression.Literal(Boolean.TRUE)
                 ),
@@ -84,9 +84,9 @@ final class ParserExpressionTests {
                 Arguments.of("Decimal Literal",
                         Arrays.asList(new Token(Token.Type.DECIMAL, "2.0", 0)),
                         new Ast.Expression.Literal(new BigDecimal("2.0"))
-                ),
+                ),*/
                 Arguments.of("Character Literal",
-                        Arrays.asList(new Token(Token.Type.CHARACTER, "'c'", 0)),
+                        Arrays.asList(new Token(Token.Type.CHARACTER, "'\\n'", 0)),
                         new Ast.Expression.Literal('c')
                 ),
                 Arguments.of("String Literal",
