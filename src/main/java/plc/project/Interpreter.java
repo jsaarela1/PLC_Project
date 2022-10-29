@@ -1,5 +1,6 @@
 package plc.project;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -41,7 +42,17 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Global ast) {
-        throw new UnsupportedOperationException(); //TODO
+        String name = ast.getName();
+        Boolean isMutable = ast.getMutable();
+        Optional<Ast.Expression> optional = ast.getValue();
+        if (optional.isPresent()) {
+            Ast.Expression expression = optional.get();
+            scope.defineVariable(name, isMutable, visit(expression));
+        }
+        else {
+            scope.defineVariable(name, isMutable, Environment.NIL);
+        }
+        return Environment.NIL;
     }
 
     @Override
@@ -51,20 +62,15 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Expression ast) {
-        //Ast.Expression expression = ast.getExpression();
-        //Environment.PlcObject plcObj = new Environment.PlcObject(this.scope, ast.getExpression());
-        // return plcObj;
         Ast.Expression expression = ast.getExpression();
-        System.out.println(expression.toString());
+        visit(expression);
         return Environment.NIL;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Declaration ast) {
         Optional<Ast.Expression> optional = ast.getValue();
         if (optional.isPresent()) {
-            //Ast.Expression expression = (Ast.Expression) optional.get();
             Ast.Expression expression = optional.get();
 
             // result is a PLC object
@@ -76,19 +82,77 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         return Environment.NIL;
     }
 
+
     @Override
     public Environment.PlcObject visit(Ast.Statement.Assignment ast) {
-        //if (ast.getReceiver().equals(Ast.Expression.Access));
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression expression = ast.getReceiver();
+        requireType(Ast.Expression.Access.class, new Environment.PlcObject(this.scope, expression));
+        String name = ((Ast.Expression.Access)expression).getName();
+        Optional<Ast.Expression> optional = ((Ast.Expression.Access)expression).getOffset();
+        Environment.Variable variable = scope.lookupVariable(name);
+        if (optional.isPresent()) {
+            Ast.Expression offset = optional.get();
+            Ast.Expression value = ast.getValue();
+            Object offsetValue = ((Ast.Expression.Literal)offset).getLiteral();
+            Object objValue = ((Ast.Expression.Literal)value).getLiteral();
+            Object temp = variable.getValue().getValue();
+            List<BigInteger> list = (List<BigInteger>) temp;
+            BigInteger tempOffsetVal = (BigInteger) offsetValue;
+            BigInteger tempObjVal = (BigInteger) objValue;
+            int index = tempOffsetVal.intValue();
+            list.set(index, tempObjVal);
+            variable.setValue(new Environment.PlcObject(this.scope, list));
+            return Environment.NIL;
+        }
+        else {
+            Ast.Expression value = ast.getValue();
+            Object obj = ((Ast.Expression.Literal)value).getLiteral();
+            variable.setValue(new Environment.PlcObject(this.scope, obj));
+            return Environment.NIL;
+        }
     }
 
+
+    // ---------------------------------------------------------------------
+    // -----Will work when I get Ast.Statement.Expression working-----------
+    // ---------------------------------------------------------------------
     @Override
     public Environment.PlcObject visit(Ast.Statement.If ast) {
-        throw new UnsupportedOperationException(); //TODO
+        Object obj = ((Ast.Expression.Literal)ast.getCondition()).getLiteral();
+        Environment.PlcObject plcObj = new Environment.PlcObject(this.scope, obj);
+        requireType(Boolean.class, plcObj);
+        if (obj.equals(Boolean.TRUE)) {
+            List<Ast.Statement> list = ast.getThenStatements();
+            for (int i = 0; i < list.size(); i++) {
+                visit(list.get(i));
+            }
+        }
+        // if the boolean equals false
+        List<Ast.Statement> list = ast.getElseStatements();
+        for (int i = 0; i < list.size(); i++) {
+            visit(list.get(i));
+        }
+        return Environment.NIL;
+        //throw new UnsupportedOperationException(); //TODO
     }
 
+
+
+    // NEEDS FIXING!!!
     @Override
     public Environment.PlcObject visit(Ast.Statement.Switch ast) {
+        // not sure what to do about "inside of a new scope"
+        Ast.Expression condition = ast.getCondition();
+        Object obj = ((Ast.Expression.Literal)ast.getCondition()).getLiteral();
+        List<Ast.Statement.Case> list = ast.getCases();
+        for (int i = 0; i < list.size(); i++) {
+            if (obj.equals(list.get(i))) {
+                visit(list.get(i));
+            }
+        }
+        // otherwise it is DEFAULT
+        // evaluate default case here
+
         throw new UnsupportedOperationException(); //TODO
     }
 
@@ -269,12 +333,19 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     public Environment.PlcObject visit(Ast.Expression.Access ast) {
         Optional<Ast.Expression> optional = ast.getOffset();
         if (optional.isPresent()) {
-            // -------------------------------------
-            // needs to add for if there is offset
-            // -------------------------------------
+            Ast.Expression expression = optional.get();
+            Object obj = ((Ast.Expression.Literal)expression).getLiteral();
+            if (obj.getClass().getName() != "java.math.BigInteger") {
+                throw new RuntimeException("Offset must be a BigInteger");
+            }
+            Environment.Variable returnObj = scope.lookupVariable(ast.getName());
+            Object temp = returnObj.getValue().getValue();
+            List<BigInteger> list = (List<BigInteger>) temp;
+            BigInteger tempVal = (BigInteger) obj;
+            int index = tempVal.intValue();
+            return new Environment.PlcObject(this.scope, list.get(index));
         }
         return new Environment.PlcObject(this.scope, ast.getName());
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
