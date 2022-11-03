@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="plclist, literal, group, declaration, binary(95%), and access(almost)">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="up to 26/36 tests working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +94,7 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.InterpreterTests">
+  <component name="RunManager" selected="JUnit.InterpreterTests.testWhileStatement">
     <configuration name="InterpreterTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -109,7 +110,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterpreterTests.testDeclarationStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="InterpreterTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -119,23 +120,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testDeclarationStatement(java.lang.String,plc.project.Ast$Statement$Declaration,java.lang.Object)" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="InterpreterTests.testIfStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PLC_Project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testIfStatement(java.lang.String,plc.project.Ast$Statement$If,java.lang.Object)" />
+      <option name="METHOD_NAME" value="testBinaryExpression(java.lang.String,plc.project.Ast,java.lang.Object)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -173,13 +158,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="InterpreterTests.testWhileStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PLC_Project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
+      <option name="METHOD_NAME" value="testWhileStatement" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.InterpreterTests.testWhileStatement" />
         <item itemvalue="JUnit.InterpreterTests" />
-        <item itemvalue="JUnit.InterpreterTests.testVariableAssignmentStatement" />
         <item itemvalue="JUnit.InterpreterTests.testListAssignmentStatement" />
-        <item itemvalue="JUnit.InterpreterTests.testDeclarationStatement" />
-        <item itemvalue="JUnit.InterpreterTests.testIfStatement" />
+        <item itemvalue="JUnit.InterpreterTests.testVariableAssignmentStatement" />
+        <item itemvalue="JUnit.InterpreterTests.testBinaryExpression" />
       </list>
     </recent_temporary>
   </component>
@@ -388,7 +389,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666933271182</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="up to 26/36 tests working">
+      <created>1667012606918</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1667012606918</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -403,7 +411,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="PLC project lex" />
     <MESSAGE value="We got identifier, integers, and decimals running" />
     <MESSAGE value="got character up and running" />
     <MESSAGE value="got string up and running" />
@@ -428,7 +435,8 @@
     <MESSAGE value="up to date" />
     <MESSAGE value="fixed the switch" />
     <MESSAGE value="plclist, literal, group, declaration, binary(95%), and access(almost)" />
-    <option name="LAST_COMMIT_MESSAGE" value="plclist, literal, group, declaration, binary(95%), and access(almost)" />
+    <MESSAGE value="up to 26/36 tests working" />
+    <option name="LAST_COMMIT_MESSAGE" value="up to 26/36 tests working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -469,15 +477,6 @@
           </properties>
           <option name="timeStamp" value="123" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
-          <line>70</line>
-          <properties class="plc.project.Interpreter" method="visit">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="177" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
           <line>728</line>
@@ -490,13 +489,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
-          <line>334</line>
-          <option name="timeStamp" value="171" />
+          <line>148</line>
+          <option name="timeStamp" value="188" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
-          <line>88</line>
-          <option name="timeStamp" value="173" />
+          <line>174</line>
+          <option name="timeStamp" value="207" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

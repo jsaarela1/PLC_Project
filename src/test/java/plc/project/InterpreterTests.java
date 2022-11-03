@@ -249,7 +249,7 @@ final class InterpreterTests {
         Scope scope = new Scope(null);
         scope.defineVariable("num", true, Environment.create(BigInteger.ZERO));
         test(new Ast.Statement.While(
-                new Ast.Expression.Binary("<",
+                new Ast.Expression.Binary("!=",
                         new Ast.Expression.Access(Optional.empty(),"num"),
                         new Ast.Expression.Literal(BigInteger.TEN)
                 ),

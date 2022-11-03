@@ -7,6 +7,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
@@ -93,12 +94,14 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         if (optional.isPresent()) {
             Ast.Expression offset = optional.get();
             Ast.Expression value = ast.getValue();
-            Object offsetValue = ((Ast.Expression.Literal)offset).getLiteral();
-            Object objValue = ((Ast.Expression.Literal)value).getLiteral();
+            Environment.PlcObject offsetVal = visit(offset);
+            Environment.PlcObject valueVal = visit(value);
+            //Object offsetValue = ((Ast.Expression.Literal)offset).getLiteral();
+            //Object objValue = ((Ast.Expression.Literal)value).getLiteral();
             Object temp = variable.getValue().getValue();
             List<BigInteger> list = (List<BigInteger>) temp;
-            BigInteger tempOffsetVal = (BigInteger) offsetValue;
-            BigInteger tempObjVal = (BigInteger) objValue;
+            BigInteger tempOffsetVal = (BigInteger) offsetVal.getValue();
+            BigInteger tempObjVal = (BigInteger) valueVal.getValue();
             int index = tempOffsetVal.intValue();
             list.set(index, tempObjVal);
             variable.setValue(new Environment.PlcObject(this.scope, list));
@@ -106,8 +109,9 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         }
         else {
             Ast.Expression value = ast.getValue();
-            Object obj = ((Ast.Expression.Literal)value).getLiteral();
-            variable.setValue(new Environment.PlcObject(this.scope, obj));
+            Environment.PlcObject obj = visit(value);
+            Object obj2 = obj.getValue();
+            variable.setValue(new Environment.PlcObject(this.scope, obj2));
             return Environment.NIL;
         }
     }
@@ -133,7 +137,6 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             visit(list.get(i));
         }
         return Environment.NIL;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
 
@@ -141,15 +144,20 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     // NEEDS FIXING!!!
     @Override
     public Environment.PlcObject visit(Ast.Statement.Switch ast) {
+        /*
         // not sure what to do about "inside of a new scope"
         Ast.Expression condition = ast.getCondition();
-        Object obj = ((Ast.Expression.Literal)ast.getCondition()).getLiteral();
+        Environment.PlcObject obj = visit(condition);
+        //Object obj = ((Ast.Expression.Literal)ast.getCondition()).getLiteral();
         List<Ast.Statement.Case> list = ast.getCases();
         for (int i = 0; i < list.size(); i++) {
-            if (obj.equals(list.get(i))) {
+            Object x = obj.getValue();
+            Object y = list.get(i).getValue();
+           // Object z = y.getValue();
+            if (obj.getValue().equals(list.get(i))) {
                 visit(list.get(i));
             }
-        }
+        }*/
         // otherwise it is DEFAULT
         // evaluate default case here
 
@@ -163,7 +171,29 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.While ast) {
-        throw new UnsupportedOperationException(); //TODO (in lecture)
+
+        while (requireType(Boolean.class, visit(ast.getCondition()))) {
+            try {
+                scope = new Scope(scope);
+                ast.getStatements().forEach(this::visit);
+            } finally {
+                scope = scope.getParent();
+            }
+        }
+        return Environment.NIL;
+        /*
+        Ast.Expression expression = ast.getCondition();
+        Environment.PlcObject obj = visit(expression);
+        requireType(Boolean.class, obj);
+        while (obj.getValue().equals(Boolean.TRUE)) {
+            List<Ast.Statement> list = ast.getStatements();
+            for (int i = 0; i < list.size(); i++) {
+                Ast.Statement statement= list.get(i);
+                visit(statement);
+            }
+            obj = visit(expression);
+        }
+        return Environment.NIL;*/
     }
 
     @Override
@@ -185,7 +215,6 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         Ast.Expression expression = ast.getExpression();
         Environment.PlcObject plcObj = visit(expression);
         return plcObj;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     // BINARY = 90% good
@@ -193,35 +222,32 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     public Environment.PlcObject visit(Ast.Expression.Binary ast) {
         String operator = ast.getOperator();
         Ast.Expression leftExpression = ast.getLeft();
-        Object lhs = ((Ast.Expression.Literal)leftExpression).getLiteral();
+        Environment.PlcObject lhs = visit(leftExpression);
         if ((operator.equals("&&")) || (operator.equals("||"))) {
-            if (!lhs.getClass().getName().equals("java.lang.Boolean")) {
-                throw new RuntimeException("Needs to be a boolean");
-            }
-            //Environment.PlcObject plcObj = new Environment.PlcObject(this.scope, lhs);
-            //requireType(Boolean.class, plcObj);
+            requireType(Boolean.class, lhs);
             if (operator.equals("||")) {
-                if ((Boolean)lhs == true) {
+                if ((Boolean)lhs.getValue() == true) {
                     return new Environment.PlcObject(this.scope, true);
                 }
                 Ast.Expression rightExpression = ast.getRight();
-                Object rhs = ((Ast.Expression.Literal)rightExpression).getLiteral();
-                if ((Boolean)rhs == true) {
+                Environment.PlcObject rhs = visit(rightExpression);
+                if ((Boolean)rhs.getValue() == true) {
                     return new Environment.PlcObject(this.scope, true);
                 }
                 return new Environment.PlcObject(this.scope, false);
             }
             // else: operator is AND
             Ast.Expression rightExpression = ast.getRight();
-            Object rhs = ((Ast.Expression.Literal)rightExpression).getLiteral();
-            if (((Boolean)lhs != true) || ((Boolean)rhs != true))  {
+            Environment.PlcObject rhs = visit(rightExpression);
+            if (((Boolean)lhs.getValue() != true) || ((Boolean)rhs.getValue() != true))  {
                 return new Environment.PlcObject(this.scope, false);
             }
             return new Environment.PlcObject(this.scope, true);
         }
+
         else if ((operator.equals("==")) != (operator.equals("!="))) {
             Ast.Expression rightExpression = ast.getRight();
-            Object rhs = ((Ast.Expression.Literal)rightExpression).getLiteral();
+            Environment.PlcObject rhs = visit(rightExpression);
             if (operator.equals("==")) {
                 if (lhs.equals(rhs)) {
                     return new Environment.PlcObject(this.scope, true);
@@ -235,46 +261,74 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             return new Environment.PlcObject(this.scope, true);
         }
         else if (operator.equals("+")) {
-            if (lhs.getClass().getName().equals("java.lang.String"))  {
-                Ast.Expression rightExpression = ast.getRight();
-                Object rhs = ((Ast.Expression.Literal)rightExpression).getLiteral();
-                if (!rhs.getClass().getName().equals("java.lang.String")) {
-                    throw new RuntimeException("Not matching types");
+            Object x = lhs.getValue();
+            String tempStr = x.toString();
+            Ast.Expression rightExpression = ast.getRight();
+            Environment.PlcObject rhs = visit(rightExpression);
+            Object x2 = rhs.getValue();
+            String tempStr2 = x2.toString();
+            String type = "BigInteger";
+            for (int i = 0; i < tempStr.length(); i++) {
+                if (((tempStr.charAt(i) > 64) && (tempStr.charAt(i) < 91)) || ((tempStr.charAt(i) > 96) && (tempStr.charAt(i) < 123))) {
+                    type = "String";
+                    break;
                 }
-                String temp1 = (String) lhs;
-                String temp2 = (String) rhs;;
+                else if (tempStr.charAt(i) == 46) {
+                    type = "BigDecimal";
+                    break;
+                }
+            }
+            // check the right hand side bc if either is a string, it concatenates to a string!
+            for (int i = 0; i < tempStr2.length(); i++) {
+                if (((tempStr2.charAt(i) > 64) && (tempStr2.charAt(i) < 91)) || ((tempStr2.charAt(i) > 96) && (tempStr2.charAt(i) < 123))) {
+                    type = "String";
+                    break;
+                }
+            }
+            if (type.equals("String")) {
+                requireType(String.class, rhs);
+                String temp1 = (String) lhs.getValue();
+                String temp2 = (String) rhs.getValue();;
                 return new Environment.PlcObject(this.scope, temp1.concat(temp2));
             }
-            else if (lhs.getClass().getName().equals("java.math.BigInteger"))  {
-                Ast.Expression rightExpression = ast.getRight();
-                Object rhs = ((Ast.Expression.Literal)rightExpression).getLiteral();
-                if (!rhs.getClass().getName().equals("java.math.BigInteger")) {
-                    throw new RuntimeException("Not matching types");
-                }
-                BigInteger temp1 = (BigInteger) lhs;
-                BigInteger temp2 = (BigInteger) rhs;;
+            else if (type.equals("BigInteger"))  {
+                requireType(BigInteger.class, rhs);
+                BigInteger temp1 = (BigInteger) lhs.getValue();
+                BigInteger temp2 = (BigInteger) rhs.getValue();;
                 return new Environment.PlcObject(this.scope, temp1.add(temp2));
             }
-            else if (lhs.getClass().getName().equals("java.math.BigDecimal"))  {
-                Ast.Expression rightExpression = ast.getRight();
-                Object rhs = ((Ast.Expression.Literal)rightExpression).getLiteral();
-                if (!rhs.getClass().getName().equals("java.math.BigDecimal")) {
-                    throw new RuntimeException("Not matching types");
-                }
-                BigDecimal temp1 = (BigDecimal) lhs;
-                BigDecimal temp2 = (BigDecimal) rhs;;
+            else if (type.equals("BigDecimal"))  {
+                requireType(BigDecimal.class, rhs);
+                BigDecimal temp1 = (BigDecimal) lhs.getValue();
+                BigDecimal temp2 = (BigDecimal) rhs.getValue();;
                 return new Environment.PlcObject(this.scope, temp1.add(temp2));
             }
         }
         else if ((operator.equals("-")) || (operator.equals("*"))) {
-            if (lhs.getClass().getName().equals("java.math.BigDecimal"))  {
-                Ast.Expression rightExpression = ast.getRight();
-                Object rhs = ((Ast.Expression.Literal)rightExpression).getLiteral();
-                if (!rhs.getClass().getName().equals("java.math.BigDecimal")) {
-                    throw new RuntimeException("Not matching types");
+            Object x = lhs.getValue();
+            String tempStr = x.toString();
+            String type = "BigInteger";
+            for (int i = 0; i < tempStr.length(); i++) {
+                if (tempStr.charAt(i) == 46) {
+                    type = "BigDecimal";
+                    break;
                 }
-                BigDecimal temp1 = (BigDecimal) lhs;
-                BigDecimal temp2 = (BigDecimal) rhs;
+            }
+            Ast.Expression rightExpression = ast.getRight();
+            Environment.PlcObject rhs = visit(rightExpression);
+            if (type.equals("BigDecimal")) {
+                requireType(BigDecimal.class, rhs);
+                BigDecimal temp1 = (BigDecimal) lhs.getValue();
+                BigDecimal temp2 = (BigDecimal) rhs.getValue();
+                if (operator.equals("-")) {
+                    return new Environment.PlcObject(this.scope, temp1.subtract(temp2));
+                }
+                return new Environment.PlcObject(this.scope, temp1.multiply(temp2));
+            }
+            else {
+                requireType(BigInteger.class, rhs);
+                BigInteger temp1 = (BigInteger) lhs.getValue();
+                BigInteger temp2 = (BigInteger) rhs.getValue();
                 if (operator.equals("-")) {
                     return new Environment.PlcObject(this.scope, temp1.subtract(temp2));
                 }
@@ -282,32 +336,36 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             }
         }
         else if (operator.equals("/")) {
-            if (lhs.getClass().getName().equals("java.math.BigInteger"))  {
-                Ast.Expression rightExpression = ast.getRight();
-                Object rhs = ((Ast.Expression.Literal)rightExpression).getLiteral();
-                if (!rhs.getClass().getName().equals("java.math.BigInteger")) {
-                    throw new RuntimeException("Not matching types");
+            Object x = lhs.getValue();
+            String tempStr = x.toString();
+            String type = "BigInteger";
+            for (int i = 0; i < tempStr.length(); i++) {
+                if (tempStr.charAt(i) == 46) {
+                    type = "BigDecimal";
+                    break;
                 }
-                BigInteger temp1 = (BigInteger) lhs;
-                BigInteger temp2 = (BigInteger) rhs;;
+            }
+            Ast.Expression rightExpression = ast.getRight();
+            Environment.PlcObject rhs = visit(rightExpression);
+            if (type.equals("BigInteger"))  {
+                requireType(BigInteger.class, rhs);
+                BigInteger temp1 = (BigInteger) lhs.getValue();
+                BigInteger temp2 = (BigInteger) rhs.getValue();;
                 if (temp2.equals(0)) {
                     throw new RuntimeException("Cannot divide by zero");
                 }
                 return new Environment.PlcObject(this.scope, temp1.divide(temp2));
             }
-            else if (lhs.getClass().getName().equals("java.math.BigDecimal"))  {
-                Ast.Expression rightExpression = ast.getRight();
-                Object rhs = ((Ast.Expression.Literal)rightExpression).getLiteral();
-                if (!rhs.getClass().getName().equals("java.math.BigDecimal")) {
-                    throw new RuntimeException("Not matching types");
-                }
-                BigDecimal temp1 = (BigDecimal) lhs;
-                BigDecimal temp2 = (BigDecimal) rhs;
+            else if (type.equals("BigDecimal")) {
+                requireType(BigDecimal.class, rhs);
+                BigDecimal temp1 = (BigDecimal) lhs.getValue();
+                BigDecimal temp2 = (BigDecimal) rhs.getValue();
                 if (temp2.equals(0)) {
                     throw new RuntimeException("Cannot divide by zero");
                 }
                 return new Environment.PlcObject(this.scope, temp1.divide(temp2, RoundingMode.HALF_EVEN));
             }
+
         }
 
 
@@ -315,16 +373,13 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         //         MIGHT NEED TO FIX BC OF DOCUMENTATION AB POWERS
         // ------------------------------------------------------------------
         else if (operator.equals("^")) {
-            if (lhs.getClass().getName().equals("java.math.BigInteger"))  {
-                Ast.Expression rightExpression = ast.getRight();
-                Object rhs = ((Ast.Expression.Literal)rightExpression).getLiteral();
-                if (!rhs.getClass().getName().equals("java.math.BigInteger")) {
-                    throw new RuntimeException("Not matching types");
-                }
-                BigInteger temp1 = (BigInteger) lhs;
-                int temp2 = (int) rhs;
-                return new Environment.PlcObject(this.scope, temp1.pow(temp2));
-            }
+            requireType(BigInteger.class, lhs);
+            Ast.Expression rightExpression = ast.getRight();
+            Environment.PlcObject rhs = visit(rightExpression);
+            requireType(BigInteger.class, rhs);
+            BigInteger temp1 = (BigInteger) lhs.getValue();
+            int temp2 = (int) rhs.getValue();
+            return new Environment.PlcObject(this.scope, temp1.pow(temp2));
         }
         throw new UnsupportedOperationException(); //TODO
     }
@@ -345,11 +400,18 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             int index = tempVal.intValue();
             return new Environment.PlcObject(this.scope, list.get(index));
         }
-        return new Environment.PlcObject(this.scope, ast.getName());
+        Object temp = scope.lookupVariable(ast.getName()).getValue().getValue();
+        return new Environment.PlcObject(this.scope, temp);
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Expression.Function ast) {
+        String name = ast.getName();
+        List<Ast.Expression> arguments = ast.getArguments();
+        List<Environment.PlcObject> list = new ArrayList<>();
+        //Function<List<Environment.PlcObject>, Environment.PlcObject> functionList = new Function<>();
+        //Environment.Function function = new Environment.Function(name, arguments.size(), list);
+        // check lecture for when he mentioned how to do this!
         throw new UnsupportedOperationException(); //TODO
     }
 
