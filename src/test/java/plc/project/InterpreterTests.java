@@ -243,6 +243,7 @@ final class InterpreterTests {
         Assertions.assertEquals(new Character('n'), scope.lookupVariable("letter").getValue().getValue());
     }
 
+
     @Test
     void testWhileStatement() {
         // WHILE num < 10 DO num = num + 1; END

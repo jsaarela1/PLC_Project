@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="up to 26/36 tests working">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="line 113 throwing stack overflow error">
+      <change afterPath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterBaselineTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" afterDir="false" />
@@ -94,7 +95,7 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.InterpreterTests.testWhileStatement">
+  <component name="RunManager" selected="JUnit.InterpreterTests.testFunction">
     <configuration name="InterpreterTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -110,7 +111,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterpreterTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="InterpreterTests.testFunction" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -120,7 +121,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testBinaryExpression(java.lang.String,plc.project.Ast,java.lang.Object)" />
+      <option name="METHOD_NAME" value="testFunction(java.lang.String,plc.project.Ast$Function,java.util.List,java.lang.Object)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -176,11 +177,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.InterpreterTests.testWhileStatement" />
+        <item itemvalue="JUnit.InterpreterTests.testFunction" />
         <item itemvalue="JUnit.InterpreterTests" />
         <item itemvalue="JUnit.InterpreterTests.testListAssignmentStatement" />
+        <item itemvalue="JUnit.InterpreterTests.testWhileStatement" />
         <item itemvalue="JUnit.InterpreterTests.testVariableAssignmentStatement" />
-        <item itemvalue="JUnit.InterpreterTests.testBinaryExpression" />
       </list>
     </recent_temporary>
   </component>
@@ -396,7 +397,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667012606918</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="line 113 throwing stack overflow error">
+      <created>1667437642734</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1667437642734</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -411,7 +419,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="We got identifier, integers, and decimals running" />
     <MESSAGE value="got character up and running" />
     <MESSAGE value="got string up and running" />
     <MESSAGE value="everything except operator working" />
@@ -436,7 +443,8 @@
     <MESSAGE value="fixed the switch" />
     <MESSAGE value="plclist, literal, group, declaration, binary(95%), and access(almost)" />
     <MESSAGE value="up to 26/36 tests working" />
-    <option name="LAST_COMMIT_MESSAGE" value="up to 26/36 tests working" />
+    <MESSAGE value="line 113 throwing stack overflow error" />
+    <option name="LAST_COMMIT_MESSAGE" value="line 113 throwing stack overflow error" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -489,13 +497,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
-          <line>148</line>
-          <option name="timeStamp" value="188" />
+          <line>61</line>
+          <option name="timeStamp" value="213" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
-          <line>174</line>
-          <option name="timeStamp" value="207" />
+          <line>253</line>
+          <option name="timeStamp" value="214" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
+          <line>75</line>
+          <option name="timeStamp" value="233" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

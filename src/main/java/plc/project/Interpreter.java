@@ -1,12 +1,13 @@
 package plc.project;
 
-import javax.swing.text.html.Option;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.lang.Comparable;
 import java.util.function.Function;
 
 public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
@@ -19,7 +20,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             System.out.println(args.get(0).getValue());
             return Environment.NIL;
         });
-/*
+
         scope.defineFunction("logarithm", 1, args-> {
             if (!(args.get(0).getValue() instanceof BigDecimal)) {
                 throw new RuntimeException("Expected a BigDecimal, received " +
@@ -29,7 +30,6 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             BigDecimal result = BigDecimal.valueOf(Math.log(bd2.doubleValue()));
             return Environment.create(result);
         });
-*/
     }
 
     public Scope getScope() {
@@ -58,7 +58,29 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //Environment.PlcObject plcObj = visit(ast.getCondition());
+        String name = ast.getName();
+        List<Ast.Statement> listStatements = ast.getStatements();
+        List<String> listString = ast.getParameters();
+        List<Environment.PlcObject> listPlcObj = new ArrayList<>();
+        try {
+            scope = new Scope(scope);
+            for (int i = 0; i < listString.size(); i++) {
+                Object x= listString.get(i);
+                //visit(listString.get(i));
+                Environment.PlcObject plcObj = Environment.create(x);
+                System.out.print("HOLDER");
+                scope.defineVariable(listString.get(i), true, plcObj);
+            }
+            for (int i = 0; i < listStatements.size(); i++) {
+                Object temp = visit(listStatements.get(i));
+                listPlcObj.add(Environment.create(temp));
+            }
+        } finally {
+            //scope.defineFunction(name, listString.size(), Function<<listPlcObj>, Environment.PlcObject>);
+            scope = scope.getParent();
+        }
+        return Environment.NIL;
     }
 
     @Override
@@ -83,90 +105,81 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         return Environment.NIL;
     }
 
-
     @Override
     public Environment.PlcObject visit(Ast.Statement.Assignment ast) {
         Ast.Expression expression = ast.getReceiver();
         requireType(Ast.Expression.Access.class, new Environment.PlcObject(this.scope, expression));
         String name = ((Ast.Expression.Access)expression).getName();
         Optional<Ast.Expression> optional = ((Ast.Expression.Access)expression).getOffset();
-        Environment.Variable variable = scope.lookupVariable(name);
+        Environment.Variable variable = this.scope.lookupVariable(name);
         if (optional.isPresent()) {
             Ast.Expression offset = optional.get();
             Ast.Expression value = ast.getValue();
             Environment.PlcObject offsetVal = visit(offset);
             Environment.PlcObject valueVal = visit(value);
-            //Object offsetValue = ((Ast.Expression.Literal)offset).getLiteral();
-            //Object objValue = ((Ast.Expression.Literal)value).getLiteral();
             Object temp = variable.getValue().getValue();
             List<BigInteger> list = (List<BigInteger>) temp;
             BigInteger tempOffsetVal = (BigInteger) offsetVal.getValue();
             BigInteger tempObjVal = (BigInteger) valueVal.getValue();
             int index = tempOffsetVal.intValue();
             list.set(index, tempObjVal);
-            variable.setValue(new Environment.PlcObject(this.scope, list));
+            variable.setValue(Environment.create(list));
             return Environment.NIL;
         }
         else {
             Ast.Expression value = ast.getValue();
             Environment.PlcObject obj = visit(value);
-            Object obj2 = obj.getValue();
-            variable.setValue(new Environment.PlcObject(this.scope, obj2));
+            variable.setValue(Environment.create(obj.getValue()));
             return Environment.NIL;
         }
     }
 
-
-    // ---------------------------------------------------------------------
-    // -----Will work when I get Ast.Statement.Expression working-----------
-    // ---------------------------------------------------------------------
     @Override
     public Environment.PlcObject visit(Ast.Statement.If ast) {
-        Object obj = ((Ast.Expression.Literal)ast.getCondition()).getLiteral();
-        Environment.PlcObject plcObj = new Environment.PlcObject(this.scope, obj);
+        Environment.PlcObject plcObj = visit(ast.getCondition());
         requireType(Boolean.class, plcObj);
-        if (obj.equals(Boolean.TRUE)) {
-            List<Ast.Statement> list = ast.getThenStatements();
-            for (int i = 0; i < list.size(); i++) {
-                visit(list.get(i));
+        try {
+            scope = new Scope(scope);
+            if (plcObj.getValue().equals(Boolean.TRUE)) {
+                ast.getThenStatements().forEach(this::visit);
             }
-        }
-        // if the boolean equals false
-        List<Ast.Statement> list = ast.getElseStatements();
-        for (int i = 0; i < list.size(); i++) {
-            visit(list.get(i));
+            else {
+                ast.getElseStatements().forEach(this::visit);
+            }
+        } finally {
+            scope = scope.getParent();
         }
         return Environment.NIL;
     }
 
-
-
-    // NEEDS FIXING!!!
     @Override
     public Environment.PlcObject visit(Ast.Statement.Switch ast) {
-        /*
-        // not sure what to do about "inside of a new scope"
-        Ast.Expression condition = ast.getCondition();
-        Environment.PlcObject obj = visit(condition);
-        //Object obj = ((Ast.Expression.Literal)ast.getCondition()).getLiteral();
-        List<Ast.Statement.Case> list = ast.getCases();
-        for (int i = 0; i < list.size(); i++) {
-            Object x = obj.getValue();
-            Object y = list.get(i).getValue();
-           // Object z = y.getValue();
-            if (obj.getValue().equals(list.get(i))) {
-                visit(list.get(i));
+        Environment.PlcObject plcObj = visit(ast.getCondition());
+        try {
+            scope = new Scope(scope);
+            List<Ast.Statement.Case> list = ast.getCases();
+            Object size = list.size();
+            for (int i = 0; i < list.size(); i++) {
+                Optional<Ast.Expression> optional = list.get(i).getValue();
+                if (optional.isPresent()) {
+                    Ast.Expression expression = optional.get();
+                    Environment.PlcObject checkObj = visit(expression);
+                    if (plcObj.getValue().equals(checkObj.getValue())) {
+                        visit(list.get(i));
+                        break;
+                    }
+                }
             }
-        }*/
-        // otherwise it is DEFAULT
-        // evaluate default case here
-
-        throw new UnsupportedOperationException(); //TODO
+        } finally {
+            scope = scope.getParent();
+        }
+        return Environment.NIL;
     }
 
     @Override
     public Environment.PlcObject visit(Ast.Statement.Case ast) {
-        throw new UnsupportedOperationException(); //TODO
+        ast.getStatements().forEach(this::visit);
+        return Environment.NIL;
     }
 
     @Override
@@ -181,24 +194,15 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             }
         }
         return Environment.NIL;
-        /*
-        Ast.Expression expression = ast.getCondition();
-        Environment.PlcObject obj = visit(expression);
-        requireType(Boolean.class, obj);
-        while (obj.getValue().equals(Boolean.TRUE)) {
-            List<Ast.Statement> list = ast.getStatements();
-            for (int i = 0; i < list.size(); i++) {
-                Ast.Statement statement= list.get(i);
-                visit(statement);
-            }
-            obj = visit(expression);
-        }
-        return Environment.NIL;*/
     }
 
+
+    // MIGHT BE COMPLETELY WRONG.. LOL
     @Override
     public Environment.PlcObject visit(Ast.Statement.Return ast) {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression expression = ast.getValue();
+        Environment.PlcObject plcObj = visit(expression);
+        throw new Return(plcObj);
     }
 
     @Override
@@ -244,18 +248,32 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             }
             return new Environment.PlcObject(this.scope, true);
         }
+        else if ((operator.equals("<")) || (operator.equals(">"))) {
+            Ast.Expression rightExpression = ast.getRight();
+            Environment.PlcObject rhs = visit(rightExpression);
+            Object returnVal = requireType(Comparable.class, lhs).compareTo(requireType(Comparable.class, rhs));
+            if ((returnVal.equals(-1) && operator.equals("<")) || (returnVal.equals(1) && operator.equals(">"))) {
+                return new Environment.PlcObject(this.scope, Boolean.TRUE);
+            }
+            else {
+                return new Environment.PlcObject(this.scope, Boolean.FALSE);
+            }
 
+            //return new Environment.PlcObject(this.scope, returnVal);
+            //requireType(Comparable.class, rhs);
+            //return Environment.create(requireType(Comparable.class, lhs).)
+        }
         else if ((operator.equals("==")) != (operator.equals("!="))) {
             Ast.Expression rightExpression = ast.getRight();
             Environment.PlcObject rhs = visit(rightExpression);
             if (operator.equals("==")) {
-                if (lhs.equals(rhs)) {
+                if (lhs.getValue().equals(rhs.getValue())) {
                     return new Environment.PlcObject(this.scope, true);
                 }
                 return new Environment.PlcObject(this.scope, false);
             }
             // looking for not equal
-            if (lhs.equals(rhs)) {
+            if (lhs.getValue().equals(rhs.getValue())) {
                 return new Environment.PlcObject(this.scope, false);
             }
             return new Environment.PlcObject(this.scope, true);
@@ -389,14 +407,12 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         Optional<Ast.Expression> optional = ast.getOffset();
         if (optional.isPresent()) {
             Ast.Expression expression = optional.get();
-            Object obj = ((Ast.Expression.Literal)expression).getLiteral();
-            if (obj.getClass().getName() != "java.math.BigInteger") {
-                throw new RuntimeException("Offset must be a BigInteger");
-            }
+            Environment.PlcObject obj = visit(expression);
+            requireType(BigInteger.class, obj);
             Environment.Variable returnObj = scope.lookupVariable(ast.getName());
             Object temp = returnObj.getValue().getValue();
             List<BigInteger> list = (List<BigInteger>) temp;
-            BigInteger tempVal = (BigInteger) obj;
+            BigInteger tempVal = (BigInteger) obj.getValue();
             int index = tempVal.intValue();
             return new Environment.PlcObject(this.scope, list.get(index));
         }
@@ -408,11 +424,14 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     public Environment.PlcObject visit(Ast.Expression.Function ast) {
         String name = ast.getName();
         List<Ast.Expression> arguments = ast.getArguments();
-        List<Environment.PlcObject> list = new ArrayList<>();
-        //Function<List<Environment.PlcObject>, Environment.PlcObject> functionList = new Function<>();
-        //Environment.Function function = new Environment.Function(name, arguments.size(), list);
-        // check lecture for when he mentioned how to do this!
-        throw new UnsupportedOperationException(); //TODO
+        List<Environment.PlcObject> plcArgumentList = new ArrayList<>();
+        for (int i = 0; i < arguments.size(); i++) {
+            Environment.PlcObject plcObj = visit(arguments.get(i));
+            plcArgumentList.add(plcObj);
+        }
+        int arity = arguments.size();
+        Environment.Function function = scope.lookupFunction(name, arity);
+        return function.invoke(plcArgumentList);
     }
 
     @Override
@@ -420,12 +439,11 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         List<Ast.Expression> list = ast.getValues();
         List<Object> list2 = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            Ast.Expression.Literal temp = (Ast.Expression.Literal) ast.getValues().get(i);
-            list2.add(temp.getLiteral());
+            Environment.PlcObject temp = visit(ast.getValues().get(i));
+            list2.add(temp.getValue());
         }
         Environment.PlcObject plcObj = new Environment.PlcObject(this.scope, list2);
         return plcObj;
-        //throw new UnsupportedOperationException(); //TODO
     }
 
     /**
@@ -442,14 +460,15 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     /**
      * Exception class for returning values.
      */
-    private static class Return extends RuntimeException {
+    public static class Return extends RuntimeException {
 
-        private final Environment.PlcObject value;
+        public final Environment.PlcObject value;
 
-        private Return(Environment.PlcObject value) {
+        public Return(Environment.PlcObject value) {
             this.value = value;
         }
 
     }
 
 }
+
