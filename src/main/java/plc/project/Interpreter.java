@@ -55,10 +55,14 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         }
         return Environment.NIL;
     }
+/*
+    @Override
+    public Environment.PlcObject visit(Ast.Method ast) {
+        return Environment.NIL;
+    }*/
 
     @Override
     public Environment.PlcObject visit(Ast.Function ast) {
-        //Environment.PlcObject plcObj = visit(ast.getCondition());
         String name = ast.getName();
         List<Ast.Statement> listStatements = ast.getStatements();
         List<String> listString = ast.getParameters();
@@ -108,10 +112,10 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     @Override
     public Environment.PlcObject visit(Ast.Statement.Assignment ast) {
         Ast.Expression expression = ast.getReceiver();
-        requireType(Ast.Expression.Access.class, new Environment.PlcObject(this.scope, expression));
+        requireType(Ast.Expression.Access.class, new Environment.PlcObject(scope, expression));
         String name = ((Ast.Expression.Access)expression).getName();
         Optional<Ast.Expression> optional = ((Ast.Expression.Access)expression).getOffset();
-        Environment.Variable variable = this.scope.lookupVariable(name);
+        Environment.Variable variable = scope.lookupVariable(name);
         if (optional.isPresent()) {
             Ast.Expression offset = optional.get();
             Ast.Expression value = ast.getValue();
@@ -209,9 +213,9 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
     public Environment.PlcObject visit(Ast.Expression.Literal ast) {
         String x = ast.toString();
         if (x.contains("literal=null")) {
-            return new Environment.PlcObject(this.scope, Environment.NIL.getValue());
+            return new Environment.PlcObject(scope, Environment.NIL.getValue());
         }
-        return new Environment.PlcObject(this.scope, ast.getLiteral());
+        return new Environment.PlcObject(scope, ast.getLiteral());
     }
 
     @Override
@@ -231,32 +235,32 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             requireType(Boolean.class, lhs);
             if (operator.equals("||")) {
                 if ((Boolean)lhs.getValue() == true) {
-                    return new Environment.PlcObject(this.scope, true);
+                    return new Environment.PlcObject(scope, true);
                 }
                 Ast.Expression rightExpression = ast.getRight();
                 Environment.PlcObject rhs = visit(rightExpression);
                 if ((Boolean)rhs.getValue() == true) {
-                    return new Environment.PlcObject(this.scope, true);
+                    return new Environment.PlcObject(scope, true);
                 }
-                return new Environment.PlcObject(this.scope, false);
+                return new Environment.PlcObject(scope, false);
             }
             // else: operator is AND
             Ast.Expression rightExpression = ast.getRight();
             Environment.PlcObject rhs = visit(rightExpression);
             if (((Boolean)lhs.getValue() != true) || ((Boolean)rhs.getValue() != true))  {
-                return new Environment.PlcObject(this.scope, false);
+                return new Environment.PlcObject(scope, false);
             }
-            return new Environment.PlcObject(this.scope, true);
+            return new Environment.PlcObject(scope, true);
         }
         else if ((operator.equals("<")) || (operator.equals(">"))) {
             Ast.Expression rightExpression = ast.getRight();
             Environment.PlcObject rhs = visit(rightExpression);
             Object returnVal = requireType(Comparable.class, lhs).compareTo(requireType(Comparable.class, rhs));
             if ((returnVal.equals(-1) && operator.equals("<")) || (returnVal.equals(1) && operator.equals(">"))) {
-                return new Environment.PlcObject(this.scope, Boolean.TRUE);
+                return new Environment.PlcObject(scope, Boolean.TRUE);
             }
             else {
-                return new Environment.PlcObject(this.scope, Boolean.FALSE);
+                return new Environment.PlcObject(scope, Boolean.FALSE);
             }
 
             //return new Environment.PlcObject(this.scope, returnVal);
@@ -268,15 +272,15 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             Environment.PlcObject rhs = visit(rightExpression);
             if (operator.equals("==")) {
                 if (lhs.getValue().equals(rhs.getValue())) {
-                    return new Environment.PlcObject(this.scope, true);
+                    return new Environment.PlcObject(scope, true);
                 }
-                return new Environment.PlcObject(this.scope, false);
+                return new Environment.PlcObject(scope, false);
             }
             // looking for not equal
             if (lhs.getValue().equals(rhs.getValue())) {
-                return new Environment.PlcObject(this.scope, false);
+                return new Environment.PlcObject(scope, false);
             }
-            return new Environment.PlcObject(this.scope, true);
+            return new Environment.PlcObject(scope, true);
         }
         else if (operator.equals("+")) {
             Object x = lhs.getValue();
@@ -307,19 +311,19 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
                 requireType(String.class, rhs);
                 String temp1 = (String) lhs.getValue();
                 String temp2 = (String) rhs.getValue();;
-                return new Environment.PlcObject(this.scope, temp1.concat(temp2));
+                return new Environment.PlcObject(scope, temp1.concat(temp2));
             }
             else if (type.equals("BigInteger"))  {
                 requireType(BigInteger.class, rhs);
                 BigInteger temp1 = (BigInteger) lhs.getValue();
                 BigInteger temp2 = (BigInteger) rhs.getValue();;
-                return new Environment.PlcObject(this.scope, temp1.add(temp2));
+                return new Environment.PlcObject(scope, temp1.add(temp2));
             }
             else if (type.equals("BigDecimal"))  {
                 requireType(BigDecimal.class, rhs);
                 BigDecimal temp1 = (BigDecimal) lhs.getValue();
                 BigDecimal temp2 = (BigDecimal) rhs.getValue();;
-                return new Environment.PlcObject(this.scope, temp1.add(temp2));
+                return new Environment.PlcObject(scope, temp1.add(temp2));
             }
         }
         else if ((operator.equals("-")) || (operator.equals("*"))) {
@@ -339,18 +343,18 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
                 BigDecimal temp1 = (BigDecimal) lhs.getValue();
                 BigDecimal temp2 = (BigDecimal) rhs.getValue();
                 if (operator.equals("-")) {
-                    return new Environment.PlcObject(this.scope, temp1.subtract(temp2));
+                    return new Environment.PlcObject(scope, temp1.subtract(temp2));
                 }
-                return new Environment.PlcObject(this.scope, temp1.multiply(temp2));
+                return new Environment.PlcObject(scope, temp1.multiply(temp2));
             }
             else {
                 requireType(BigInteger.class, rhs);
                 BigInteger temp1 = (BigInteger) lhs.getValue();
                 BigInteger temp2 = (BigInteger) rhs.getValue();
                 if (operator.equals("-")) {
-                    return new Environment.PlcObject(this.scope, temp1.subtract(temp2));
+                    return new Environment.PlcObject(scope, temp1.subtract(temp2));
                 }
-                return new Environment.PlcObject(this.scope, temp1.multiply(temp2));
+                return new Environment.PlcObject(scope, temp1.multiply(temp2));
             }
         }
         else if (operator.equals("/")) {
@@ -397,7 +401,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             requireType(BigInteger.class, rhs);
             BigInteger temp1 = (BigInteger) lhs.getValue();
             int temp2 = (int) rhs.getValue();
-            return new Environment.PlcObject(this.scope, temp1.pow(temp2));
+            return new Environment.PlcObject(scope, temp1.pow(temp2));
         }
         throw new UnsupportedOperationException(); //TODO
     }
@@ -414,10 +418,10 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             List<BigInteger> list = (List<BigInteger>) temp;
             BigInteger tempVal = (BigInteger) obj.getValue();
             int index = tempVal.intValue();
-            return new Environment.PlcObject(this.scope, list.get(index));
+            return new Environment.PlcObject(scope, list.get(index));
         }
         Object temp = scope.lookupVariable(ast.getName()).getValue().getValue();
-        return new Environment.PlcObject(this.scope, temp);
+        return new Environment.PlcObject(scope, temp);
     }
 
     @Override
@@ -442,7 +446,7 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
             Environment.PlcObject temp = visit(ast.getValues().get(i));
             list2.add(temp.getValue());
         }
-        Environment.PlcObject plcObj = new Environment.PlcObject(this.scope, list2);
+        Environment.PlcObject plcObj = new Environment.PlcObject(scope, list2);
         return plcObj;
     }
 

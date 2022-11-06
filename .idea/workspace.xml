@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="line 113 throwing stack overflow error">
-      <change afterPath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterBaselineTests.java" afterDir="false" />
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="everything except function and source working!!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/InterpreterTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,13 +87,28 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\test\java\plc\homework" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\test\java\plc\project" />
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\plc\project" />
+      <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\test\java\plc\project" />
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\test\java\examples" />
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.InterpreterTests.testFunction">
+  <component name="RunManager" selected="JUnit.InterpreterBaselineTests">
+    <configuration name="InterpreterBaselineTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PLC_Project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterBaselineTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="InterpreterTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -143,22 +156,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="InterpreterTests.testVariableAssignmentStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PLC_Project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.InterpreterTests" />
-      <option name="METHOD_NAME" value="testVariableAssignmentStatement" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="InterpreterTests.testWhileStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -177,11 +174,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.InterpreterTests.testFunction" />
+        <item itemvalue="JUnit.InterpreterBaselineTests" />
         <item itemvalue="JUnit.InterpreterTests" />
+        <item itemvalue="JUnit.InterpreterTests.testFunction" />
         <item itemvalue="JUnit.InterpreterTests.testListAssignmentStatement" />
         <item itemvalue="JUnit.InterpreterTests.testWhileStatement" />
-        <item itemvalue="JUnit.InterpreterTests.testVariableAssignmentStatement" />
       </list>
     </recent_temporary>
   </component>
@@ -404,7 +401,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667437642734</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="everything except function and source working!!">
+      <created>1667611392286</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1667611392286</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -419,7 +423,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="got character up and running" />
     <MESSAGE value="got string up and running" />
     <MESSAGE value="everything except operator working" />
     <MESSAGE value="everything except escape working.&#10;all test cases passed." />
@@ -444,7 +447,8 @@
     <MESSAGE value="plclist, literal, group, declaration, binary(95%), and access(almost)" />
     <MESSAGE value="up to 26/36 tests working" />
     <MESSAGE value="line 113 throwing stack overflow error" />
-    <option name="LAST_COMMIT_MESSAGE" value="line 113 throwing stack overflow error" />
+    <MESSAGE value="everything except function and source working!!" />
+    <option name="LAST_COMMIT_MESSAGE" value="everything except function and source working!!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -497,18 +501,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
-          <line>61</line>
-          <option name="timeStamp" value="213" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
-          <line>253</line>
+          <line>255</line>
           <option name="timeStamp" value="214" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Interpreter.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="233" />
+          <line>70</line>
+          <option name="timeStamp" value="235" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
