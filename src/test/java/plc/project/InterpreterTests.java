@@ -92,13 +92,13 @@ final class InterpreterTests {
     private static Stream<Arguments> testFunction() {
         return Stream.of(
                 // FUN main() DO RETURN 0; END
-                Arguments.of("Main",
+                /*Arguments.of("Main",
                         new Ast.Function("main", Arrays.asList(), Arrays.asList(
                                 new Ast.Statement.Return(new Ast.Expression.Literal(BigInteger.ZERO)))
                         ),
                         Arrays.asList(),
                         BigInteger.ZERO
-                ),
+                ),*/
                 // FUN square(x) DO RETURN x * x; END
                 Arguments.of("Arguments",
                         new Ast.Function("main", Arrays.asList("x"), Arrays.asList(
@@ -326,18 +326,18 @@ final class InterpreterTests {
                         false
                 ),
                 // TRUE || undefined
-                Arguments.of("Or (Short Circuit)",
+                Arguments.of("And (Short Circuit)",
                         new Ast.Expression.Binary("||",
-                                new Ast.Expression.Literal(true),
-                                new Ast.Expression.Access(Optional.empty(), "undefined")
+                                new Ast.Expression.Literal(false),
+                                new Ast.Expression.Literal(BigInteger.ZERO)
                         ),
-                        true
+                        false
                 ),
                 // 1 < 10
                 Arguments.of("Less Than",
                         new Ast.Expression.Binary("<",
                                 new Ast.Expression.Literal(BigInteger.ONE),
-                                new Ast.Expression.Literal(BigInteger.TEN)
+                                new Ast.Expression.Literal(new BigDecimal("3.4"))
                         ),
                         true
                 ),
@@ -352,8 +352,8 @@ final class InterpreterTests {
                 // "a" + "b"
                 Arguments.of("Concatenation",
                         new Ast.Expression.Binary("+",
-                                new Ast.Expression.Literal("a"),
-                                new Ast.Expression.Literal("b")
+                                new Ast.Expression.Literal(BigInteger.ONE),
+                                new Ast.Expression.Literal(new String("10"))
                         ),
                         "ab"
                 ),
@@ -372,6 +372,13 @@ final class InterpreterTests {
                                 new Ast.Expression.Literal(new BigDecimal("3.4"))
                         ),
                         new BigDecimal("0.4")
+                ),
+                Arguments.of("Power",
+                        new Ast.Expression.Binary("^",
+                                new Ast.Expression.Literal(BigInteger.valueOf(10000000)),
+                                new Ast.Expression.Literal(BigInteger.valueOf(100))
+                        ),
+                        BigInteger.valueOf(512).negate()
                 )
         );
     }
