@@ -184,7 +184,8 @@ public final class Analyzer implements Ast.Visitor<Void> {
         if (!ast.getExpression().getClass().equals(Ast.Expression.Binary.class)) {
             throw new RuntimeException("A group expression must be a binary expresssion");
         }
-        throw new UnsupportedOperationException();  // TODO
+        ast.setType(ast.getExpression().getType());
+        return null;
     }
 
     @Override
