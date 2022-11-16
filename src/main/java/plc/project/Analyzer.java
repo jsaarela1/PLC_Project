@@ -1,15 +1,10 @@
 package plc.project;
 
-import javafx.beans.binding.DoubleExpression;
-import org.omg.CORBA.Any;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Struct;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * See the specification for information about what the different visit
@@ -48,9 +43,10 @@ public final class Analyzer implements Ast.Visitor<Void> {
     public Void visit(Ast.Statement.Expression ast) {
         Ast.Expression expression = ast.getExpression();
         visit(expression);
-
+        if (!expression.getClass().equals(Ast.Expression.Function.class)) {
+            throw new RuntimeException("Receiver must be an access expression");
+        }
         return null;
-        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
@@ -104,12 +100,45 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Switch ast) {
-        throw new UnsupportedOperationException();  // TODO
+        Ast.Expression condition = ast.getCondition();
+        visit(condition);
+        Environment.Type conditionType = condition.getType();
+        List<Ast.Statement.Case> cases = ast.getCases();
+        // check all cases except the default
+        for (int i = 0; i < cases.size(); i++) {
+            visit(cases.get(i));
+            Optional<Ast.Expression> optional = cases.get(i).getValue();
+            if (optional.isPresent()) {
+                // ensure the default case does not have a value
+                if (i == cases.size() - 1) {
+                    throw new RuntimeException("Default case cannot contain a value");
+                }
+                Ast.Expression expression = optional.get();
+                visit(expression);
+                requireAssignable(expression.getType(), conditionType);
+            }
+
+        }
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Case ast) {
-        throw new UnsupportedOperationException();  // TODO
+        Optional<Ast.Expression> optional = ast.getValue();
+        if (optional.isPresent()) {
+            Ast.Expression expression = optional.get();
+            visit(expression);
+        }
+        try {
+            scope = new Scope(scope);
+            for (Ast.Statement stmt : ast.getStatements()) {
+                visit(stmt);
+            }
+        } finally {
+            scope = scope.getParent();
+        }
+        return null;
+        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
@@ -176,11 +205,10 @@ public final class Analyzer implements Ast.Visitor<Void> {
     }
 
 
-    // no test cases smh.. so no clue atm
+    // no test cases smh... so no clue atm
     @Override
     public Void visit(Ast.Expression.Group ast) {
         visit(ast.getExpression());
-        Object o = ast.getExpression().getClass();
         if (!ast.getExpression().getClass().equals(Ast.Expression.Binary.class)) {
             throw new RuntimeException("A group expression must be a binary expresssion");
         }
@@ -264,8 +292,18 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Expression.Function ast) {
+        String name = ast.getName();
+        List<Ast.Expression> listArgs = ast.getArguments();
+        Environment.Function function = scope.lookupFunction(name, listArgs.size());
+        ast.setFunction(function);
 
-        throw new UnsupportedOperationException();  // TODO
+        // check that provided arguments are assignable to the corresponding paramater types
+        List<Environment.Type> listParameterTypes = function.getParameterTypes();
+        for (int i = 0; i < listParameterTypes.size(); i++) {
+            visit(listArgs.get(i));
+            requireAssignable(listParameterTypes.get(i), listArgs.get(i).getType());
+        }
+        return null;
     }
 
     @Override
