@@ -2,6 +2,7 @@ package plc.project;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +25,43 @@ public final class Analyzer implements Ast.Visitor<Void> {
         return scope;
     }
 
+    public Environment.Type getReturnType(String str) {
+        Environment.Type returnType = Environment.Type.NIL;
+        if (str.equals("Any")) {
+            returnType = Environment.Type.ANY;
+        }
+        else if (str.equals("Comparable")) {
+            returnType = Environment.Type.COMPARABLE;
+        }
+        else if (str.equals("Integer")) {
+            returnType = Environment.Type.INTEGER;
+        }
+        else if (str.equals("Decimal")) {
+            returnType = Environment.Type.DECIMAL;
+        }
+        else if (str.equals("Boolean")) {
+            returnType = Environment.Type.BOOLEAN;
+        }
+        else if (str.equals("Character")) {
+            returnType = Environment.Type.CHARACTER;
+        }
+        else if (str.equals("String")) {
+            returnType = Environment.Type.STRING;
+        }
+        return returnType;
+    }
+
+    // -------------------------------------------------------------------------------------
+    // --------------------------- TO DO ---------------------------------------------------
+    // -------------------------------------------------------------------------------------
     @Override
     public Void visit(Ast.Source ast) {
         throw new UnsupportedOperationException();  // TODO
     }
 
+    // -------------------------------------------------------------------------------------
+    // --------------------------- TO DO ---------------------------------------------------
+    // -------------------------------------------------------------------------------------
     @Override
     public Void visit(Ast.Global ast) {
         throw new UnsupportedOperationException();  // TODO
@@ -36,7 +69,37 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Function ast) {
-        throw new UnsupportedOperationException();  // TODO
+        String name = ast.getName();
+        List<String> listStr = ast.getParameters();
+        List<String> parameterTypeNames = ast.getParameterTypeNames();
+        List<Environment.Type> parameterTypeList = new ArrayList<>();
+        for (int i = 0; i < parameterTypeNames.size(); i++) {
+            Environment.Type parameterType = getReturnType(parameterTypeNames.get(i));
+            parameterTypeList.add(parameterType);
+        }
+        Environment.Type returnType = Environment.Type.NIL;
+        Optional<String> optional = ast.getReturnTypeName();
+        if (optional.isPresent()) {
+            String typeStr = optional.get();
+            returnType = getReturnType(typeStr);
+        }
+        Environment.Function function = scope.defineFunction(name, name, parameterTypeList, returnType, args -> Environment.NIL);
+        ast.setFunction(function);
+
+        // visit statements
+        try {
+            scope = new Scope(scope);
+            for (int i = 0; i < parameterTypeNames.size(); i++) {
+                scope.defineVariable(listStr.get(i), parameterTypeNames.get(i), parameterTypeList.get(i), true, Environment.NIL);
+            }
+            scope.defineVariable("returnType", "returnType", returnType, true, Environment.NIL);
+            for (Ast.Statement stmt : ast.getStatements()) {
+                visit(stmt);
+            }
+        } finally {
+            scope = scope.getParent();
+        }
+        return null;
     }
 
     @Override
@@ -51,8 +114,67 @@ public final class Analyzer implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.Declaration ast) {
+        String name = ast.getName();
+        Environment.Type type = Environment.Type.NIL;
+        boolean variableType = false;
 
-        throw new UnsupportedOperationException();  // TODO
+        // type of variable
+        Optional<String> optionalStr = ast.getTypeName();
+        if (optionalStr.isPresent()) {
+            String typeStr = optionalStr.get();
+            if (typeStr.equals("Any")) {
+                type = Environment.Type.ANY;
+                variableType = true;
+            }
+            else if (typeStr.equals("Comparable")) {
+                type = Environment.Type.COMPARABLE;
+                variableType = true;
+            }
+            else if (typeStr.equals("Integer")) {
+                type = Environment.Type.INTEGER;
+                variableType = true;
+            }
+            else if (typeStr.equals("Decimal")) {
+                type = Environment.Type.DECIMAL;
+                variableType = true;
+            }
+            else if (typeStr.equals("Boolean")) {
+                type = Environment.Type.BOOLEAN;
+                variableType = true;
+            }
+            else if (typeStr.equals("Character")) {
+                type = Environment.Type.CHARACTER;
+                variableType = true;
+            }
+            else if (typeStr.equals("String")) {
+                type = Environment.Type.STRING;
+                variableType = true;
+            }
+        }
+
+        // value of variable
+        Optional<Ast.Expression> optional = ast.getValue();
+        if (optional.isPresent()) {
+            Ast.Expression expression = optional.get();
+            visit(expression);
+            // throw runtime exception if the value, if present, is not assignable to the variable
+            if (variableType) {
+                requireAssignable(type, expression.getType());
+            }
+            //Environment.Variable variable = scope.defineVariable(name, name, ENv)
+            if (!variableType) {
+                type = expression.getType();
+                variableType = true;
+            }
+        }
+        if (!variableType) {
+            throw new RuntimeException("Neither variable type nor type of value are present");
+        }
+
+        // define variable in scope, and set variable
+        Environment.Variable variable = scope.defineVariable(name, name, type, true, Environment.NIL);
+        ast.setVariable(variable);
+        return null;
     }
 
     @Override
@@ -138,7 +260,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
             scope = scope.getParent();
         }
         return null;
-        //throw new UnsupportedOperationException();  // TODO
     }
 
     @Override
@@ -156,9 +277,17 @@ public final class Analyzer implements Ast.Visitor<Void> {
         return null;
     }
 
+    // -------------------------------------------------------------------------------------
+    // --------------------------- TO DO ---------------------------------------------------
+    // -------------------------------------------------------------------------------------
     @Override
     public Void visit(Ast.Statement.Return ast) {
-        throw new UnsupportedOperationException();  // TODO
+        Ast.Expression expression = ast.getValue();
+        visit(expression);
+        Environment.Variable returnVariable = scope.lookupVariable("returnType");
+        requireAssignable(returnVariable.getType(), expression.getType());
+        System.out.println("S");
+        return null;
     }
 
     @Override
@@ -277,8 +406,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
     @Override
     public Void visit(Ast.Expression.Access ast) {
         String name = ast.getName();
-        Environment.Variable variable = scope.lookupVariable(name);
-        ast.setVariable(variable);
         Optional<Ast.Expression> optional = ast.getOffset();
         if (optional.isPresent()) {
             Ast.Expression expression = optional.get();
@@ -287,6 +414,8 @@ public final class Analyzer implements Ast.Visitor<Void> {
                 throw new RuntimeException("Offset value must be an integer");
             }
         }
+        Environment.Variable variable = scope.lookupVariable(name);
+        ast.setVariable(variable);
         return null;
     }
 
@@ -306,6 +435,10 @@ public final class Analyzer implements Ast.Visitor<Void> {
         return null;
     }
 
+
+    // -------------------------------------------------------------------------------------
+    // --------------------------- TO DO ---------------------------------------------------
+    // -------------------------------------------------------------------------------------
     @Override
     public Void visit(Ast.Expression.PlcList ast) {
         List<Ast.Expression> listOfValues = ast.getValues();

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="group">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="switch working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" afterDir="false" />
     </list>
@@ -93,7 +93,7 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AnalyzerTests">
+  <component name="RunManager" selected="JUnit.AnalyzerTests.testFunction">
     <configuration name="AnalyzerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -175,8 +175,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.AnalyzerTests" />
         <item itemvalue="JUnit.AnalyzerTests.testFunction" />
+        <item itemvalue="JUnit.AnalyzerTests" />
         <item itemvalue="JUnit.AnalyzerTests.testDeclarationStatement" />
         <item itemvalue="JUnit.AnalyzerTests.testAssignmentStatement" />
         <item itemvalue="JUnit.AnalyzerTests.testIfStatement" />
@@ -430,7 +430,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668556514476</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="switch working">
+      <created>1668634114673</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1668634114673</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -445,7 +452,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="everything except escape working.&#10;all test cases passed." />
     <MESSAGE value="rewrote integers/decimals" />
     <MESSAGE value="everything working except slash in character, and the newline" />
     <MESSAGE value="lexer working correctly." />
@@ -470,7 +476,8 @@
     <MESSAGE value="everything except function and source working!!" />
     <MESSAGE value="analyzer" />
     <MESSAGE value="group" />
-    <option name="LAST_COMMIT_MESSAGE" value="group" />
+    <MESSAGE value="switch working" />
+    <option name="LAST_COMMIT_MESSAGE" value="switch working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -533,18 +540,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="310" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
-          <line>134</line>
-          <option name="timeStamp" value="323" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
-          <line>126</line>
-          <option name="timeStamp" value="325" />
+          <line>407</line>
+          <option name="timeStamp" value="332" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.UnsupportedOperationException" package="java.lang" />
