@@ -54,9 +54,6 @@ public final class Analyzer implements Ast.Visitor<Void> {
         return returnType;
     }
 
-    // -------------------------------------------------------------------------------------
-    // --------------------------- TO DO ---------------------------------------------------
-    // -------------------------------------------------------------------------------------
     @Override
     public Void visit(Ast.Source ast) {
         for (Ast.Global global : ast.getGlobals()) {

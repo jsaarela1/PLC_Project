@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="ast.function working. global and source left">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="analyzer complete">
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -444,7 +443,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668720250272</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="analyzer complete">
+      <created>1668723453844</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1668723453844</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -459,7 +465,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="everything working except slash in character, and the newline" />
     <MESSAGE value="lexer working correctly." />
     <MESSAGE value="character slash test still failing. everything else working appropriately" />
     <MESSAGE value="beg of pt2" />
@@ -484,7 +489,8 @@
     <MESSAGE value="group" />
     <MESSAGE value="switch working" />
     <MESSAGE value="ast.function working. global and source left" />
-    <option name="LAST_COMMIT_MESSAGE" value="ast.function working. global and source left" />
+    <MESSAGE value="analyzer complete" />
+    <option name="LAST_COMMIT_MESSAGE" value="analyzer complete" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -547,17 +553,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
-          <line>423</line>
+          <line>420</line>
           <option name="timeStamp" value="332" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
-          <line>439</line>
+          <line>436</line>
           <option name="timeStamp" value="342" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
-          <line>66</line>
+          <line>63</line>
           <option name="timeStamp" value="350" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
