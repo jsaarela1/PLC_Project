@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="switch working">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="ast.function working. global and source left">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" afterDir="false" />
     </list>
@@ -93,7 +93,7 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AnalyzerTests.testFunction">
+  <component name="RunManager" selected="JUnit.AnalyzerTests">
     <configuration name="AnalyzerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
@@ -105,22 +105,6 @@
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="AnalyzerTests.testAssignmentStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PLC_Project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
-      <option name="METHOD_NAME" value="testAssignmentStatement(java.lang.String,plc.project.Ast$Statement$Assignment,plc.project.Ast$Statement$Assignment)" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -157,7 +141,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AnalyzerTests.testIfStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="AnalyzerTests.testGlobal" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -167,7 +151,23 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
-      <option name="METHOD_NAME" value="testIfStatement(java.lang.String,plc.project.Ast$Statement$If,plc.project.Ast$Statement$If)" />
+      <option name="METHOD_NAME" value="testGlobal(java.lang.String,plc.project.Ast$Global,plc.project.Ast$Global)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AnalyzerTests.testSource" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PLC_Project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
+      <option name="METHOD_NAME" value="testSource(java.lang.String,plc.project.Ast$Source,plc.project.Ast$Source)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -175,11 +175,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.AnalyzerTests.testFunction" />
         <item itemvalue="JUnit.AnalyzerTests" />
+        <item itemvalue="JUnit.AnalyzerTests.testSource" />
+        <item itemvalue="JUnit.AnalyzerTests.testGlobal" />
+        <item itemvalue="JUnit.AnalyzerTests.testFunction" />
         <item itemvalue="JUnit.AnalyzerTests.testDeclarationStatement" />
-        <item itemvalue="JUnit.AnalyzerTests.testAssignmentStatement" />
-        <item itemvalue="JUnit.AnalyzerTests.testIfStatement" />
       </list>
     </recent_temporary>
   </component>
@@ -437,7 +437,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668634114673</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="ast.function working. global and source left">
+      <created>1668720250272</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1668720250272</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -452,7 +459,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="rewrote integers/decimals" />
     <MESSAGE value="everything working except slash in character, and the newline" />
     <MESSAGE value="lexer working correctly." />
     <MESSAGE value="character slash test still failing. everything else working appropriately" />
@@ -477,7 +483,8 @@
     <MESSAGE value="analyzer" />
     <MESSAGE value="group" />
     <MESSAGE value="switch working" />
-    <option name="LAST_COMMIT_MESSAGE" value="switch working" />
+    <MESSAGE value="ast.function working. global and source left" />
+    <option name="LAST_COMMIT_MESSAGE" value="ast.function working. global and source left" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -540,8 +547,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
-          <line>407</line>
+          <line>423</line>
           <option name="timeStamp" value="332" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
+          <line>439</line>
+          <option name="timeStamp" value="342" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="350" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.UnsupportedOperationException" package="java.lang" />

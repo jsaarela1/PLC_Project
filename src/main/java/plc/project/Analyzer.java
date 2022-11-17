@@ -48,6 +48,9 @@ public final class Analyzer implements Ast.Visitor<Void> {
         else if (str.equals("String")) {
             returnType = Environment.Type.STRING;
         }
+        else {
+            throw new RuntimeException("Type cannot be unknown");
+        }
         return returnType;
     }
 
@@ -56,15 +59,54 @@ public final class Analyzer implements Ast.Visitor<Void> {
     // -------------------------------------------------------------------------------------
     @Override
     public Void visit(Ast.Source ast) {
-        throw new UnsupportedOperationException();  // TODO
+        for (Ast.Global global : ast.getGlobals()) {
+            visit(global);
+        }
+        boolean hasMain = false;
+        for (Ast.Function function : ast.getFunctions()) {
+            String name = function.getName();
+            if (function.getName().equals("main")) {
+                if (function.getParameters().size() == 0) {
+                    hasMain = true;
+                    Optional<String> optional = function.getReturnTypeName();
+                    if (optional.isPresent()) {
+                        String str = optional.get();
+                        if (!str.equals("Integer")) {
+                            throw new RuntimeException("Return type must be of type Integer");
+                        }
+                    }
+                    else {
+                        throw new RuntimeException("Return type must exist and be of type Integer");
+                    }
+                }
+            }
+            visit(function);
+        }
+        if (!hasMain) {
+            throw new RuntimeException("A main function does not exist");
+        }
+        return null;
     }
 
-    // -------------------------------------------------------------------------------------
-    // --------------------------- TO DO ---------------------------------------------------
-    // -------------------------------------------------------------------------------------
     @Override
     public Void visit(Ast.Global ast) {
-        throw new UnsupportedOperationException();  // TODO
+        Boolean mutable = ast.getMutable();
+        String name = ast.getName();
+        String typeStr = ast.getTypeName();
+        Environment.Type typeVariable = getReturnType(typeStr);
+        scope.defineVariable("type", "type", typeVariable, mutable, Environment.NIL);
+        Optional<Ast.Expression> optional = ast.getValue();
+        if (optional.isPresent()) {
+            Ast.Expression expression = optional.get();
+            visit(expression);
+            if (!expression.getClass().equals(Ast.Expression.PlcList.class)) {
+                Environment.Type typeOfValue = expression.getType();
+                requireAssignable(typeVariable, typeOfValue);
+            }
+        }
+        Environment.Variable variable = scope.defineVariable(name, name, typeVariable, mutable, Environment.NIL);
+        ast.setVariable(variable);
+        return null;
     }
 
     @Override
@@ -122,34 +164,8 @@ public final class Analyzer implements Ast.Visitor<Void> {
         Optional<String> optionalStr = ast.getTypeName();
         if (optionalStr.isPresent()) {
             String typeStr = optionalStr.get();
-            if (typeStr.equals("Any")) {
-                type = Environment.Type.ANY;
-                variableType = true;
-            }
-            else if (typeStr.equals("Comparable")) {
-                type = Environment.Type.COMPARABLE;
-                variableType = true;
-            }
-            else if (typeStr.equals("Integer")) {
-                type = Environment.Type.INTEGER;
-                variableType = true;
-            }
-            else if (typeStr.equals("Decimal")) {
-                type = Environment.Type.DECIMAL;
-                variableType = true;
-            }
-            else if (typeStr.equals("Boolean")) {
-                type = Environment.Type.BOOLEAN;
-                variableType = true;
-            }
-            else if (typeStr.equals("Character")) {
-                type = Environment.Type.CHARACTER;
-                variableType = true;
-            }
-            else if (typeStr.equals("String")) {
-                type = Environment.Type.STRING;
-                variableType = true;
-            }
+            type = getReturnType(typeStr);
+            variableType = true;
         }
 
         // value of variable
@@ -435,18 +451,17 @@ public final class Analyzer implements Ast.Visitor<Void> {
         return null;
     }
 
-
-    // -------------------------------------------------------------------------------------
-    // --------------------------- TO DO ---------------------------------------------------
-    // -------------------------------------------------------------------------------------
     @Override
     public Void visit(Ast.Expression.PlcList ast) {
         List<Ast.Expression> listOfValues = ast.getValues();
+        Environment.Variable variable = scope.lookupVariable("type");
+        Environment.Type listType = variable.getType();
         for (int i = 0; i < listOfValues.size(); i++) {
-            Object o = listOfValues.get(i);
-            System.out.print(i);
+            Ast.Expression tempValue = listOfValues.get(i);
+            visit(tempValue);
+            requireAssignable(listType, tempValue.getType());
         }
-        throw new UnsupportedOperationException();  // TODO
+        return null;
     }
 
     public static void requireAssignable(Environment.Type target, Environment.Type type) {
