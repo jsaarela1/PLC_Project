@@ -124,6 +124,19 @@ public final class Parser {
         }
         String name = tokens.get(-1).getLiteral();
         str = tokens.get(0).getLiteral();
+
+
+        // colon
+        str = tokens.get(0).getLiteral();
+        if (!str.equals(":")) {
+            throw new ParseException("Should have a colon before the identifer", tokens.index - 1);
+        }
+        if (!match(Token.Type.IDENTIFIER)) {
+            throw new ParseException("Type must be an identifier", tokens.index - 1);
+        }
+        String typeName = tokens.get(-1).getLiteral();
+
+
         if (!str.equals("=")) {
             throw new ParseException("Identifier must be followed by an equal sign ", tokens.index - 1);
         }
@@ -136,7 +149,7 @@ public final class Parser {
         str = tokens.get(0).getLiteral();
         if (str.equals("]")) {
             tokens.advance();
-            return new Ast.Global(name, true, Optional.empty());
+            return new Ast.Global(name, typeName,true , Optional.empty());
         }
         List<Ast.Expression> list = new ArrayList<>();
         Ast.Expression expression = parseExpression();
@@ -144,7 +157,7 @@ public final class Parser {
         str = tokens.get(0).getLiteral();
         tokens.advance();
         if (str.equals("]")) {
-            return new Ast.Global(name, true, Optional.of(expression));
+            return new Ast.Global(name, typeName, true, Optional.of(expression));
         }
         while (str.equals(",")) {
             expression = parseExpression();
@@ -157,7 +170,7 @@ public final class Parser {
         }
         // not sure how to return a list of elements
         // need to substitute list for expression
-        return new Ast.Global(name, true, Optional.of(expression));
+        return new Ast.Global(name,typeName, true, Optional.of(expression));
     }
 
     /**
@@ -174,9 +187,17 @@ public final class Parser {
             throw new ParseException("Identifier must follow VAR ", tokens.index - 1);
         }
         String name = tokens.get(-1).getLiteral();
+        if (!tokens.get(0).getLiteral().equals(":")) {
+            throw new ParseException("Identifier must be followed by a colon", tokens.index - 1);
+        }
+        tokens.advance();
+        if (!match(Token.Type.IDENTIFIER)) {
+            throw new ParseException("Identifier must follow colon ", tokens.index - 1);
+        }
+        String typeName = tokens.get(-1).getLiteral();
         // check if there are more tokens, if not return
         if (!tokens.has(1)) {
-            return new Ast.Global(name, true, Optional.empty());
+            return new Ast.Global(name,typeName, true, Optional.empty());
         }
         str = tokens.get(0).getLiteral();
         if (!str.equals("=")) {
@@ -184,7 +205,7 @@ public final class Parser {
         }
         tokens.advance();
         Ast.Expression expression = parseExpression();
-        return new Ast.Global(name, true, Optional.of(expression));
+        return new Ast.Global(name, typeName,true, Optional.of(expression));
     }
 
     /**
@@ -201,13 +222,21 @@ public final class Parser {
             throw new ParseException("Identifier must follow VAL ", tokens.index - 1);
         }
         String name = tokens.get(-1).getLiteral();
+        if (!tokens.get(0).getLiteral().equals(":")) {
+            throw new ParseException("Identifier must be followed by a colon", tokens.index - 1);
+        }
+        tokens.advance();
+        if (!match(Token.Type.IDENTIFIER)) {
+            throw new ParseException("Identifier must follow colon ", tokens.index - 1);
+        }
+        String typeName = tokens.get(-1).getLiteral();
         str = tokens.get(0).getLiteral();
         if (!str.equals("=")) {
             throw new ParseException("Invalid operator ", tokens.index - 1);
         }
         tokens.advance();
         Ast.Expression expression = parseExpression();
-        return new Ast.Global(name, false, Optional.of(expression));
+        return new Ast.Global(name, typeName, false, Optional.of(expression));
     }
 
     /**
@@ -230,13 +259,30 @@ public final class Parser {
         }
         tokens.advance();
         List<String> parameters = new ArrayList<>();
+        List<String> parameterTypes = new ArrayList<>();
         if (match(Token.Type.IDENTIFIER)) {
             parameters.add(tokens.get(-1).toString());
+            str = tokens.get(0).getLiteral();
+            if (!str.equals(":")) {
+                throw new ParseException("Must follow identifier with a colon", tokens.index - 1);
+            }
+            if (!match(Token.Type.IDENTIFIER)) {
+                throw new ParseException("Missing identifier in function ", tokens.index - 1);
+            }
+            parameterTypes.add(tokens.get(-1).getLiteral());
             str = tokens.get(0).getLiteral();
             while (str.equals(",")) {
                 tokens.advance();
                 if (match(Token.Type.IDENTIFIER)) {
                     parameters.add(tokens.get(-1).toString());
+                    str = tokens.get(0).getLiteral();
+                    if (!str.equals(":")) {
+                        throw new ParseException("Must follow identifier with a colon", tokens.index - 1);
+                    }
+                    if (!match(Token.Type.IDENTIFIER)) {
+                        throw new ParseException("Missing identifier in function ", tokens.index - 1);
+                    }
+                    parameterTypes.add(tokens.get(-1).getLiteral());
                     str = tokens.get(0).getLiteral();
                 }
                 else {
@@ -252,6 +298,15 @@ public final class Parser {
         }
         tokens.advance();
         str = tokens.get(0).getLiteral();
+        Optional<String> returnTypeName = Optional.empty();
+        if (str.equals(":")) {
+            tokens.advance();
+            if (!match(Token.Type.IDENTIFIER)) {
+                throw new ParseException("Missing identifier in function ", tokens.index - 1);
+            }
+            returnTypeName = Optional.of(tokens.get(-1).getLiteral());
+            str = tokens.get(0).getLiteral();
+        }
         if (!str.equals("DO")) {
             throw new ParseException("Missing DO ", tokens.index - 1);
         }
@@ -262,7 +317,7 @@ public final class Parser {
             throw new ParseException("Invalid END to function ", -1);
         }
         tokens.advance();
-        return new Ast.Function(strLiteral, parameters, statements);
+        return new Ast.Function(strLiteral, parameters, parameterTypes, returnTypeName, statements);
     }
 
     /**
@@ -341,23 +396,37 @@ public final class Parser {
             throw new ParseException("Invalid Let statement ", tokens.index - 1);
         }
         tokens.advance();
-        match(Token.Type.IDENTIFIER);
+        if (!match(Token.Type.IDENTIFIER)) {
+            throw new ParseException("Missing identifier in function ", tokens.index - 1);
+        }
         String strLiteral = tokens.get(-1).getLiteral();
         if (!tokens.has(0)) {
             throw new ParseException("Missing semicolon ", tokens.index - 1);
         }
         str = tokens.get(0).getLiteral();
+        Optional<String> typeName = Optional.empty();
+        if (str.equals(":")) {
+            tokens.advance();
+            if (!match(Token.Type.IDENTIFIER)) {
+                throw new ParseException("Identifier must follow the colon", tokens.index - 1);
+            }
+            typeName = Optional.of(tokens.get(-1).getLiteral());
+            str = tokens.get(0).getLiteral();
+        }
+        if (!tokens.has(0)) {
+            throw new ParseException("Missing semicolon ", tokens.index - 1);
+        }
         if (str.equals("=")) {
             tokens.advance();
             Ast.Expression expression = parseExpression();
             str = tokens.get(0).getLiteral();
             if (str.equals(";")) {
-                return new Ast.Statement.Declaration(strLiteral, Optional.of(expression));
+                return new Ast.Statement.Declaration(strLiteral, typeName, Optional.of(expression));
             }
             throw new ParseException("Missing semicolon ", tokens.index - 1);
         }
         else if (str.equals(";")) {
-            return new Ast.Statement.Declaration(strLiteral, Optional.empty());
+            return new Ast.Statement.Declaration(strLiteral, typeName, Optional.empty());
         }
         throw new ParseException("Invalid declarative statement ", tokens.index - 1);
     }
