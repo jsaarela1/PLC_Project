@@ -199,10 +199,7 @@ public final class Analyzer implements Ast.Visitor<Void> {
             throw new RuntimeException("Receiver must be an access expression");
         }
         visit(value);
-
-        // do i have these backwards??
         requireAssignable(value.getType(), receiver.getType());
-
         return null;
     }
 
@@ -290,16 +287,12 @@ public final class Analyzer implements Ast.Visitor<Void> {
         return null;
     }
 
-    // -------------------------------------------------------------------------------------
-    // --------------------------- TO DO ---------------------------------------------------
-    // -------------------------------------------------------------------------------------
     @Override
     public Void visit(Ast.Statement.Return ast) {
         Ast.Expression expression = ast.getValue();
         visit(expression);
         Environment.Variable returnVariable = scope.lookupVariable("returnType");
         requireAssignable(returnVariable.getType(), expression.getType());
-        System.out.println("S");
         return null;
     }
 

@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="analyzer complete">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="mod parser">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -93,8 +94,8 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.LexerTests">
-    <configuration name="AnalyzerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.AnalyzerTests.testGlobal">
+    <configuration name="AnalyzerTests.testGlobal" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -104,7 +105,8 @@
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
       <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="METHOD_NAME" value="testGlobal(java.lang.String,plc.project.Ast$Global,plc.project.Ast$Global)" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -173,11 +175,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.LexerTests" />
+        <item itemvalue="JUnit.AnalyzerTests.testGlobal" />
         <item itemvalue="JUnit.ParserTests" />
+        <item itemvalue="JUnit.LexerTests" />
         <item itemvalue="JUnit.ParserTests.testSource" />
         <item itemvalue="JUnit.ParserTests.testAccessExpression" />
-        <item itemvalue="JUnit.AnalyzerTests" />
       </list>
     </recent_temporary>
   </component>
@@ -456,7 +458,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668723565354</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="mod parser">
+      <created>1668798250716</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1668798250716</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -471,7 +480,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="lexer working correctly." />
     <MESSAGE value="character slash test still failing. everything else working appropriately" />
     <MESSAGE value="beg of pt2" />
     <MESSAGE value="small update" />
@@ -496,7 +504,8 @@
     <MESSAGE value="switch working" />
     <MESSAGE value="ast.function working. global and source left" />
     <MESSAGE value="analyzer complete" />
-    <option name="LAST_COMMIT_MESSAGE" value="analyzer complete" />
+    <MESSAGE value="mod parser" />
+    <option name="LAST_COMMIT_MESSAGE" value="mod parser" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -539,7 +548,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
-          <line>797</line>
+          <line>813</line>
           <option name="timeStamp" value="110" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -559,18 +568,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
-          <line>420</line>
+          <line>413</line>
           <option name="timeStamp" value="332" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
-          <line>436</line>
+          <line>429</line>
           <option name="timeStamp" value="342" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Parser.java</url>
-          <line>116</line>
+          <line>119</line>
           <option name="timeStamp" value="351" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
+          <line>89</line>
+          <option name="timeStamp" value="352" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.UnsupportedOperationException" package="java.lang" />
