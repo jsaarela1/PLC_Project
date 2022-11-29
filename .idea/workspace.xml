@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="mod parser">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="parser fixed">
+      <change afterPath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/plc/project/GeneratorTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -465,7 +466,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668798250716</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="parser fixed">
+      <created>1669666504477</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1669666504477</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -480,7 +488,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="character slash test still failing. everything else working appropriately" />
     <MESSAGE value="beg of pt2" />
     <MESSAGE value="small update" />
     <MESSAGE value="char + str" />
@@ -505,7 +512,8 @@
     <MESSAGE value="ast.function working. global and source left" />
     <MESSAGE value="analyzer complete" />
     <MESSAGE value="mod parser" />
-    <option name="LAST_COMMIT_MESSAGE" value="mod parser" />
+    <MESSAGE value="parser fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="parser fixed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

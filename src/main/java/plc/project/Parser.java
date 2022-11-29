@@ -745,13 +745,13 @@ public final class Parser {
         }
         else if(match(Token.Type.IDENTIFIER)){
             String str = tokens.get(-1).getLiteral();
-            if (str == "NIL") {
+            if (str.equals("NIL")) {
                 return new Ast.Expression.Literal(null);
             }
-            else if (str == "TRUE") {
+            else if (str.equals("TRUE")) {
                 return new Ast.Expression.Literal(true);
             }
-            else if (str == "FALSE") {
+            else if (str.equals("FALSE")) {
                 return new Ast.Expression.Literal(false);
             }
             if (tokens.has(1)) {
