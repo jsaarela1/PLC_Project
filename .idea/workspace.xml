@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="parser fixed">
-      <change afterPath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/plc/project/GeneratorTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/GeneratorTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/GeneratorTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,8 +94,8 @@
       <recent name="C:\Users\Admin\Documents\COP4020\intellij\PLC_Project\src\main\java\examples" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AnalyzerTests.testGlobal">
-    <configuration name="AnalyzerTests.testGlobal" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.GeneratorTests.testFunctionExpression">
+    <configuration name="GeneratorTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -105,29 +104,13 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.AnalyzerTests" />
-      <option name="METHOD_NAME" value="testGlobal(java.lang.String,plc.project.Ast$Global,plc.project.Ast$Global)" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="LexerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PLC_Project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.LexerTests" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GeneratorTests.testBinaryExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -136,29 +119,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ParserTests.testAccessExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="PLC_Project.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="plc.project.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testAccessExpression(java.lang.String,java.util.List,plc.project.Ast$Expression$Access)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
+      <option name="METHOD_NAME" value="testBinaryExpression(java.lang.String,plc.project.Ast$Expression$Binary,java.lang.String)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTests.testSource" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GeneratorTests.testDeclarationStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="PLC_Project.test" />
       <extension name="coverage">
         <pattern>
@@ -167,8 +135,40 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="plc.project" />
-      <option name="MAIN_CLASS_NAME" value="plc.project.ParserTests" />
-      <option name="METHOD_NAME" value="testSource(java.lang.String,java.util.List,plc.project.Ast$Source)" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
+      <option name="METHOD_NAME" value="testDeclarationStatement(java.lang.String,plc.project.Ast$Statement$Declaration,java.lang.String)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GeneratorTests.testFunctionExpression" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PLC_Project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
+      <option name="METHOD_NAME" value="testFunctionExpression(java.lang.String,plc.project.Ast$Expression$Function,java.lang.String)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GeneratorTests.testIfStatement" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PLC_Project.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="plc.project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="plc.project" />
+      <option name="MAIN_CLASS_NAME" value="plc.project.GeneratorTests" />
+      <option name="METHOD_NAME" value="testIfStatement(java.lang.String,plc.project.Ast$Statement$If,java.lang.String)" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -176,11 +176,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.AnalyzerTests.testGlobal" />
-        <item itemvalue="JUnit.ParserTests" />
-        <item itemvalue="JUnit.LexerTests" />
-        <item itemvalue="JUnit.ParserTests.testSource" />
-        <item itemvalue="JUnit.ParserTests.testAccessExpression" />
+        <item itemvalue="JUnit.GeneratorTests.testFunctionExpression" />
+        <item itemvalue="JUnit.GeneratorTests.testIfStatement" />
+        <item itemvalue="JUnit.GeneratorTests" />
+        <item itemvalue="JUnit.GeneratorTests.testBinaryExpression" />
+        <item itemvalue="JUnit.GeneratorTests.testDeclarationStatement" />
       </list>
     </recent_temporary>
   </component>
@@ -473,7 +473,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669666504477</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="parser fixed">
+      <created>1669682593737</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1669682593737</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -593,6 +600,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Analyzer.java</url>
           <line>89</line>
           <option name="timeStamp" value="352" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Generator.java</url>
+          <line>201</line>
+          <option name="timeStamp" value="364" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.UnsupportedOperationException" package="java.lang" />

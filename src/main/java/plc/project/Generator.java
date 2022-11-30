@@ -1,6 +1,10 @@
 package plc.project;
 
 import java.io.PrintWriter;
+import java.util.Optional;
+import java.util.List;
+import java.math.BigInteger;
+import java.math.BigDecimal;
 
 public final class Generator implements Ast.Visitor<Void> {
 
@@ -40,27 +44,74 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Function ast) {
+        Environment.Function function = ast.getFunction();
+        print(function.getReturnType());
+        writer.write(" ");
+        print(function.getJvmName());
+        List<String> parameterList = ast.getParameters();
+
+
+
         throw new UnsupportedOperationException(); //TODO
     }
 
     @Override
     public Void visit(Ast.Statement.Expression ast) {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression expression = ast.getExpression();
+        visit(expression);
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Declaration ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print(ast.getVariable().getType().getJvmName(), " ", ast.getVariable().getJvmName());
+        Optional<Ast.Expression> optional = ast.getValue();
+        if (optional.isPresent()) {
+            Ast.Expression expression = optional.get();
+            writer.write(" = ");
+            visit(expression);
+        }
+        writer.write(";");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Assignment ast) {
-        throw new UnsupportedOperationException(); //TODO
+        Ast.Expression receiver = ast.getReceiver();
+        visit(receiver);
+        writer.write(" = ");
+        Ast.Expression value = ast.getValue();
+        visit(value);
+        writer.write(";");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.If ast) {
-        throw new UnsupportedOperationException(); //TODO
+        writer.write("if (");
+        visit(ast.getCondition());
+        writer.write(") {");
+        newline(0);
+        List<Ast.Statement> thenStatements = ast.getThenStatements();
+        for (Ast.Statement statement : thenStatements) {
+            writer.write("    ");
+            visit(statement);
+            writer.write(";");
+            newline(0);
+        }
+        List<Ast.Statement> elseStatements = ast.getElseStatements();
+        if (elseStatements.size() > 0) {
+            writer.write("} else {");
+            newline(0);
+            for (Ast.Statement statement : elseStatements) {
+                writer.write("    ");
+                visit(statement);
+                writer.write(";");
+                newline(0);
+            }
+        }
+        writer.write("}");
+        return null;
     }
 
     @Override
@@ -75,42 +126,107 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Statement.While ast) {
-        throw new UnsupportedOperationException(); //TODO
+        writer.write("while (");
+        visit(ast.getCondition());
+        writer.write(") {");
+        newline(0);
+        List<Ast.Statement> statementList = ast.getStatements();
+        for (Ast.Statement statement : statementList) {
+            writer.write("    ");
+            visit(statement);
+            writer.write(";");
+            newline(0);
+        }
+        writer.write("}");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Statement.Return ast) {
-        throw new UnsupportedOperationException(); //TODO
+        writer.write("return ");
+        visit(ast.getValue());
+        writer.write(";");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Literal ast) {
-        throw new UnsupportedOperationException(); //TODO
+        Environment.Type type = ast.getType();
+        if (type.equals(Environment.Type.CHARACTER)) {
+            String str = "\'" + ast.getLiteral() + "\'";
+            print(str);
+        }
+        else if (type.equals(Environment.Type.STRING)) {
+            String str = "\"" + ast.getLiteral() + "\"";
+            print(str);
+        }
+        else if (type.equals(Environment.Type.DECIMAL)) {
+            Object obj = ast.getLiteral();
+            String str = obj.toString();
+            print(new BigDecimal(str));
+        }
+        else {
+            print(ast.getLiteral());
+        }
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Group ast) {
-        throw new UnsupportedOperationException(); //TODO
+        writer.write("(");
+        visit(ast.getExpression());
+        writer.write(")");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Binary ast) {
-        throw new UnsupportedOperationException(); //TODO
+        String operator = ast.getOperator();
+        if (operator.equals("^")) {
+            writer.write("Math.pow(");
+            visit(ast.getLeft());
+            writer.write(",");
+            visit(ast.getRight());
+            writer.write(")");
+        }
+        else {
+            visit(ast.getLeft());
+            print(" " + operator + " ");
+            visit(ast.getRight());
+        }
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Access ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print(ast.getVariable().getJvmName());
+        Optional<Ast.Expression> optional = ast.getOffset();
+        if (optional.isPresent()) {
+            Ast.Expression expression = optional.get();
+            writer.write("[");
+            visit(expression);
+            writer.write("]");
+        }
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+        print(ast.getFunction().getJvmName());
+        writer.write("(");
+        List<Ast.Expression> argumentList = ast.getArguments();
+        for (int i = 0; i < argumentList.size(); i++) {
+            if ((i + 1) != argumentList.size()) {
+                writer.write(", ");
+            }
+            visit(argumentList.get(i));
+        }
+        writer.write(")");
+        return null;
     }
 
     @Override
     public Void visit(Ast.Expression.PlcList ast) {
         throw new UnsupportedOperationException(); //TODO
     }
-
 }

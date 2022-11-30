@@ -221,7 +221,7 @@ public class GeneratorTests {
                         "true && false"
                 ),
                 Arguments.of("Concatenation",
-                        // "Ben" + 10
+                        // 3
                         init(new Ast.Expression.Binary("+",
                                 init(new Ast.Expression.Literal("Ben"), ast -> ast.setType(Environment.Type.STRING)),
                                 init(new Ast.Expression.Literal(BigInteger.TEN), ast -> ast.setType(Environment.Type.INTEGER))
