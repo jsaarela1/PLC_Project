@@ -112,8 +112,7 @@ final class ParserExpressionTests {
                         Arrays.asList(
                                 //(expr)
                                 new Token(Token.Type.OPERATOR, "(", 0),
-                                new Token(Token.Type.IDENTIFIER, "expr", 1),
-                                new Token(Token.Type.OPERATOR, ")", 5)
+                                new Token(Token.Type.IDENTIFIER, "expr", 1)
                         ),
                         new Ast.Expression.Group(new Ast.Expression.Access(Optional.empty(), "expr"))
                 ),

@@ -75,7 +75,10 @@ public final class Parser {
             }
         }
         if (tokens.has(0)) {
-            throw new ParseException("Must parse globals before functions", tokens.index);
+            str = tokens.get(0).getLiteral();
+            if ((str.equals("LIST")) || (str.equals("VAR")) || (str.equals("VAL"))) {
+                throw new ParseException("Must parse globals before functions", tokens.index);
+            }
         }
         return new Ast.Source(listGlobals, listFunctions);
     }
@@ -328,7 +331,7 @@ public final class Parser {
         // need to account for 0-infinity statements being allowed
         List<Ast.Statement> list = new ArrayList<>();
         String str = tokens.get(0).getLiteral();
-        while ((tokens.has(0)) && ((!str.equals("END")) || (!str.equals("ELSE")) || (!str.equals("DEFAULT")) || (!str.equals("CASE")))) {
+        while ((tokens.has(0)) && ((!str.equals("END")) && (!str.equals("ELSE")) && (!str.equals("DEFAULT")) && (!str.equals("CASE")))) {
             Ast.Statement statement = parseStatement();
             list.add(statement);
             if (tokens.has(0)) {
@@ -443,9 +446,6 @@ public final class Parser {
         }
         tokens.advance();
         Ast.Expression expression = parseExpression();
-        if (!tokens.has(0)) {
-            throw new ParseException("Missing DO in statement", tokens.index);
-        }
         str = tokens.get(0).getLiteral();
         if (!str.equals("DO")) {
             throw new ParseException("Missing DO in statement", tokens.index);
@@ -812,6 +812,12 @@ public final class Parser {
                         Ast.Expression.Group group = new Ast.Expression.Group(expression);
                         return group;
                     }
+                    else {
+                        throw new ParseException("Must close open parenthesis with a closed parenthesis", tokens.index);
+                    }
+                }
+                else {
+                    throw new ParseException("Must close open parenthesis with a closed parenthesis", tokens.index);
                 }
             }
         }

@@ -30,9 +30,27 @@ final class ParserTests {
 
     private static Stream<Arguments> testSource() {
         return Stream.of(
-                Arguments.of("Zero Statements",
-                        Arrays.asList(),
-                        new Ast.Source(Arrays.asList(), Arrays.asList())
+                Arguments.of("List - Singular",
+                        Arrays.asList(
+                                //LET name: Type = expr;
+                                new Token(Token.Type.IDENTIFIER, "LIST", 0),
+                                new Token(Token.Type.IDENTIFIER, "list", 4),
+                                new Token(Token.Type.OPERATOR, ":", 9),
+                                new Token(Token.Type.IDENTIFIER, "Type", 11),
+                                new Token(Token.Type.OPERATOR, "=", 15),
+                                new Token(Token.Type.OPERATOR, "[", 16),
+                                new Token(Token.Type.IDENTIFIER, "expr", 17),
+                                new Token(Token.Type.OPERATOR, ",", 18),
+                                new Token(Token.Type.IDENTIFIER, "expr1", 19),
+                                new Token(Token.Type.OPERATOR, ",", 20),
+                                new Token(Token.Type.IDENTIFIER, "expr2", 21),
+                                new Token(Token.Type.OPERATOR, "]", 22),
+                                new Token(Token.Type.OPERATOR, ";", 23)
+                        ),
+                        new Ast.Source(
+                                Arrays.asList(new Ast.Global("list", "Type", true, Optional.of(new Ast.Expression.Access(Optional.empty(), "expr")))),
+                                Arrays.asList()
+                        )
                 ),
                 Arguments.of("Global - Immutable",
                         Arrays.asList(
