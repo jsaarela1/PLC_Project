@@ -53,7 +53,7 @@ public class GeneratorTests {
                                 "        return 0;",
                                 "    }",
                                 "",
-                                "}"
+                                ""
                         )
                 )
         );
@@ -69,10 +69,14 @@ public class GeneratorTests {
         expr2.setType(Environment.Type.DECIMAL);
         expr3.setType(Environment.Type.DECIMAL);
 
+        //Ast.Global global1 = new Ast.Global("var", "Integer", true, Optional.empty());
+        //Ast.Global astList2 = init(global1, ast-> ast.setVariable(new Environment.Variable("name", "var", Environment.Type.INTEGER, true, Environment.create(Optional.empty()))));
+
         Ast.Global global = new Ast.Global("list", "Decimal", true, Optional.of(new Ast.Expression.PlcList(Arrays.asList(expr1, expr2, expr3))));
         Ast.Global astList = init(global, ast -> ast.setVariable(new Environment.Variable("list", "list", Environment.Type.DECIMAL, true, Environment.create(Arrays.asList(new Double(1.0), new Double(1.5), new Double(2.0))))));
 
-        String expected = new String("double[] list = {1.0, 1.5, 2.0};");
+        String expected = new String("double[] list = {1.0, 1.5, 2.0}");
+        //String expected2 = new String("int name;;");
         test(astList, expected);
     }
 

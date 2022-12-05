@@ -32,6 +32,21 @@ public final class Generator implements Ast.Visitor<Void> {
         }
     }
 
+    public void printType(String typeName) {
+        if (typeName.equals("Decimal")) {
+            writer.write("double");
+        }
+        else if (typeName.equals("Integer")) {
+            writer.write("int");
+        }
+        else if (typeName.equals("Character")) {
+            writer.write("char");
+        }
+        else if (typeName.equals("String")) {
+            writer.write("string");
+        }
+    }
+
     @Override
     public Void visit(Ast.Source ast) {
         writer.write("public class Main {");
@@ -71,18 +86,8 @@ public final class Generator implements Ast.Visitor<Void> {
         Optional<Ast.Expression> optional = ast.getValue();
         if (variable.getJvmName().equals("list")) {
             String typeName = ast.getTypeName();
-            if (typeName.equals("Decimal")) {
-                writer.write("double[] ");
-            }
-            else if (typeName.equals("Integer")) {
-                writer.write("int[] ");
-            }
-            else if (typeName.equals("Character")) {
-                writer.write("char[] ");
-            }
-            else if (typeName.equals("String")) {
-                writer.write("string[] ");
-            }
+            printType(typeName);
+            writer.write("[] ");
             print(variable.getName());
             writer.write(" = ");
             if (optional.isPresent()) {
@@ -92,7 +97,10 @@ public final class Generator implements Ast.Visitor<Void> {
         }
         // mutable
         else if (mutable) {
-            print(variable.getType(), " ", variable.getName());
+            String typeName = ast.getTypeName();
+            printType(typeName);
+            writer.write(" ");
+            print(variable.getName());
             if (optional.isPresent()) {
                 print(" = ", optional.get());
             }
@@ -101,7 +109,10 @@ public final class Generator implements Ast.Visitor<Void> {
         // immutable
         else {
             writer.write("final ");
-            print(variable.getType(), " ", variable.getName());
+            String typeName = ast.getTypeName();
+            printType(typeName);
+            writer.write(" ");
+            print(variable.getName());
             if (optional.isPresent()) {
                 print(" = ", optional.get());
             }
@@ -113,7 +124,14 @@ public final class Generator implements Ast.Visitor<Void> {
     @Override
     public Void visit(Ast.Function ast) {
         Environment.Function function = ast.getFunction();
-        print(function.getReturnType().getJvmName());
+        Optional<String> optional = ast.getReturnTypeName();
+        if (optional.isPresent()) {
+            String returnType = optional.get();
+            printType(returnType);
+        }
+        else {
+            writer.write("Nil");
+        }
         writer.write(" ");
         print(function.getName());
         List<String> parameterList = ast.getParameters();
@@ -252,7 +270,6 @@ public final class Generator implements Ast.Visitor<Void> {
         for (Ast.Statement statement : statementList) {
             newline(1);
             visit(statement);
-            writer.write(";");
         }
         if (statementList.isEmpty()) {
             writer.write("}");

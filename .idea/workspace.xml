@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="half of generator">
+    <list default="true" id="a7ebccd3-4350-4b56-bb02-66b596fd5b8e" name="Changes" comment="generator working for all given test cases">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/plc/project/Generator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/plc/project/GeneratorTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/plc/project/GeneratorTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -486,7 +487,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669775406833</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="generator working for all given test cases">
+      <created>1670113904389</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1670113904389</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -501,7 +509,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="small update" />
     <MESSAGE value="char + str" />
     <MESSAGE value="not operator" />
     <MESSAGE value="functionExpression + accessExpression working" />
@@ -526,7 +533,8 @@
     <MESSAGE value="mod parser" />
     <MESSAGE value="parser fixed" />
     <MESSAGE value="half of generator" />
-    <option name="LAST_COMMIT_MESSAGE" value="half of generator" />
+    <MESSAGE value="generator working for all given test cases" />
+    <option name="LAST_COMMIT_MESSAGE" value="generator working for all given test cases" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -609,8 +617,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/plc/project/Generator.java</url>
-          <line>324</line>
+          <line>341</line>
           <option name="timeStamp" value="364" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/plc/project/Generator.java</url>
+          <line>83</line>
+          <option name="timeStamp" value="365" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.UnsupportedOperationException" package="java.lang" />
